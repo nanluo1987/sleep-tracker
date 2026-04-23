@@ -26,10 +26,11 @@
     background: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
-    overflow-x: hidden;padding-bottom: 80px;
+    overflow-x: hidden;
+    padding-bottom: 80px;
   }
 
-  /*===== 顶部导航 ===== */
+  /*===== 底部导航 ===== */
   .tab-bar {
     display: flex;
     position: fixed;
@@ -41,7 +42,7 @@
   }
   .tab-btn {
     flex: 1;
-    padding: 12px 08px;
+    padding: 12px 8px;
     background: none; border: none;
     color: var(--text-secondary);
     font-size: 11px;
@@ -54,12 +55,17 @@
   .tab-page { display: none; padding: 20px 16px; }
   .tab-page.active { display: block; }
 
-  /* ===== 打卡页 ===== */
+  /* ===== 打卡页===== */
   .clock-page { text-align: center; padding-top: 40px; }
   .current-time {
-    font-size: 56px; font-weight: 200;
+    font-size: 52px; font-weight: 200;
     letter-spacing: 2px; margin: 10px 0;
     font-variant-numeric: tabular-nums;
+  }
+  .current-ampm {
+    font-size: 20px; font-weight: 400;
+    color: var(--accent-light);
+    margin-left: 4px;
   }
   .current-date { color: var(--text-secondary); font-size: 14px; margin-bottom: 40px; }
   .punch-btn {
@@ -74,8 +80,7 @@
     transition: all 0.3s; position: relative;
     box-shadow: 0 0 60px rgba(99,102,241,0.3);
   }
-  .punch-btn.sleep-btn {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);}
+  .punch-btn.sleep-btn { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
   .punch-btn.wake-btn {
     background: linear-gradient(135deg, #d97706, #f59e0b);
     box-shadow: 0 0 60px rgba(245,158,11,0.3);
@@ -92,8 +97,7 @@
   }
   .quick-adjust {
     margin-top: 20px;
-    display: flex;
-    gap: 8px;
+    display: flex; gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
   }
@@ -120,6 +124,11 @@
     display: flex; align-items: center;
     justify-content: space-between;
     border: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .record-card:active {
+    border-color: var(--accent-light);
   }
   .record-left { display: flex; flex-direction: column; gap: 6px; }
   .record-date { font-size: 13px; color: var(--text-secondary); }
@@ -146,6 +155,23 @@
   }
   .delete-btn:active { opacity: 1; color: var(--danger); }
 
+  /* ===== 导出导入按钮 ===== */
+  .data-actions {
+    display: flex; gap: 10px;
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .data-btn {
+    flex: 1; padding: 14px;
+    border-radius: 14px; border: none;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; display: flex;
+    align-items: center; justify-content: center; gap: 6px;
+  }
+  .data-btn.export-btn { background: #1e3a5f; color: #60a5fa; }
+  .data-btn.import-btn { background: #3b2f1e; color: #fbbf24; }
+  .data-btn:active { opacity: 0.8; }
+
   /* ===== 图表页 ===== */
   .chart-container {
     background: var(--bg-card);
@@ -169,7 +195,7 @@
   .stat-value { font-size: 28px; font-weight: 700; }
   .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 
-  /* ===== 手动输入弹窗 ===== */
+  /* ===== 弹窗 ===== */
   .modal-overlay {
     display: none; position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -203,10 +229,12 @@
     flex: 1; padding: 12px;
     border-radius: 12px; border: none;
     font-size: 15px; font-weight: 600;
-    cursor: pointer;
-  }
+    cursor: pointer;}
   .btn-cancel { background: var(--bg-card); color: var(--text-secondary); }
   .btn-confirm { background: var(--accent); color: white; }
+  .btn-danger { background: var(--danger); color: white; }
+  .modal-btns.three-btns { display: flex; gap: 8px; }
+  .modal-btns.three-btns button { padding: 12px 8px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -224,15 +252,19 @@
   <div class="status-text" id="statusText">今晚还没有打卡哦，准备睡觉时点击按钮 🌙</div>
   <div class="quick-adjust">
     <button class="adjust-btn" onclick="openManualModal()">📝 手动记录</button>
-    <button class="adjust-btn" onclick="adjustTime(-30)">⏪ 前推30分钟</button>
-    <button class="adjust-btn" onclick="adjustTime(30)">⏩ 后推30分钟</button>
+    <button class="adjust-btn" onclick="adjustTime(-15)">⏪ 前推15分钟</button>
+    <button class="adjust-btn" onclick="adjustTime(15)">⏩ 后推15分钟</button>
   </div>
 </div>
 
 <!-- ========== 记录页 ========== -->
 <div id="page-history" class="tab-page">
-  <div class="section-title">📋睡眠记录</div>
+  <div class="section-title">📋 睡眠记录</div>
   <div id="historyList"></div>
+  <div class="data-actions">
+    <button class="data-btn export-btn" onclick="exportData()">📤 导出备份</button>
+    <button class="data-btn import-btn" onclick="importData()">📥 导入数据</button>
+  </div>
 </div>
 
 <!-- ========== 图表页 ========== -->
@@ -240,12 +272,11 @@
   <div class="section-title">📊 睡眠统计</div>
   <div class="stats-grid" id="statsGrid"></div>
   <div class="chart-container">
-    <div class="chart-title">🕐 近14天睡眠时长 (小时)</div>
-    <canvas id="durationChart"></canvas>
-  </div>
-  <div class="chart-container">
-    <div class="chart-title">🌙 入睡 & ☀️ 醒来时间趋势</div>
-    <canvas id="timeChart"></canvas>
+    <div class="chart-title">📅 每周平均睡眠时长（小时）</div>
+    <canvas id="weeklyChart"></canvas>
+  </div><div class="chart-container">
+    <div class="chart-title">🌙 入睡 →☀️ 醒来 甘特图</div>
+    <canvas id="ganttChart"></canvas>
   </div>
 </div>
 
@@ -262,17 +293,17 @@
   </button>
 </div>
 
-<!-- ========== 手动输入弹窗 ========== -->
+<!-- ========== 新增/手动 记录弹窗 ========== -->
 <div class="modal-overlay" id="manualModal">
   <div class="modal">
-    <h3>📝 手动记录睡眠</h3>
+    <h3id="modalTitle">📝 手动记录睡眠</h3>
     <label>🌙 入睡时间</label>
     <input type="datetime-local" id="manualSleep">
     <label>☀️ 醒来时间</label>
     <input type="datetime-local" id="manualWake">
-    <div class="modal-btns">
+    <div class="modal-btns three-btns" id="modalBtns">
       <button class="btn-cancel" onclick="closeManualModal()">取消</button>
-      <button class="btn-confirm" onclick="saveManualRecord()">保存</button>
+      <button class="btn-confirm" id="modalConfirmBtn" onclick="saveManualRecord()">保存</button>
     </div>
   </div>
 </div>
@@ -298,20 +329,42 @@ function saveState(state) {
 }
 
 // ==================== 时间工具 ====================
+function toAmPm(date) {
+  const d = new Date(date);
+  let h = d.getHours();
+  const m = String(d.getMinutes()).padStart(2, '0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return `${h}:${m} ${ampm}`;
+}
+
+function hourToAmPm(decimalHour) {
+  let h = Math.floor(decimalHour % 24);
+  const m = Math.round((decimalHour % 1) * 60);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
+}
+
 function fmt(date, f) {
   const d = new Date(date);
   const pad = n => String(n).padStart(2, '0');
   const map = {
-    'HH:mm': `${pad(d.getHours())}:${pad(d.getMinutes())}`,
+    'HH:mm': toAmPm(date),
     'MM/dd': `${pad(d.getMonth()+1)}/${pad(d.getDate())}`,
     'MM月dd日': `${d.getMonth()+1}月${d.getDate()}日`,
-    'full': `${d.getMonth()+1}月${d.getDate()}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`,
+    'full': `${d.getMonth()+1}月${d.getDate()}日 ${toAmPm(date)}`,
     'weekday': ['周日','周一','周二','周三','周四','周五','周六'][d.getDay()],};
   return map[f] || d.toLocaleString('zh-CN');
 }
 
+function toLocalISO(d) {
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function calcDuration(sleep, wake) {
-  return (new Date(wake) - new Date(sleep)) / 1000 / 60 / 60; // 小时
+  return (new Date(wake) - new Date(sleep)) / 1000 / 60 / 60;
 }
 
 function durationText(hours) {
@@ -329,9 +382,13 @@ function durationClass(hours) {
 // ==================== 时钟 ====================
 function updateClock() {
   const now = new Date();
-  const pad = n => String(n).padStart(2, '0');
-  document.getElementById('currentTime').textContent =
-    `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  let h = now.getHours();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('currentTime').innerHTML =
+    `${h}:${m}:${s} <span class="current-ampm">${ampm}</span>`;
   document.getElementById('currentDate').textContent =
     `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${fmt(now, 'weekday')}`;
 }
@@ -355,7 +412,7 @@ function updatePunchUI() {
     if (records.length > 0) {
       const last = records[records.length - 1];
       const dur = calcDuration(last.sleep, last.wake);
-      statusText.innerHTML = `上次睡眠: <span class="time-highlight">${durationText(dur)}</span><br>${fmt(last.sleep, 'HH:mm')} → ${fmt(last.wake, 'HH:mm')}`;
+      statusText.innerHTML = `上次睡眠: <span class="time-highlight">${durationText(dur)}</span><br>${toAmPm(last.sleep)} → ${toAmPm(last.wake)}`;
     } else {
       statusText.innerHTML = '今晚还没有打卡哦，准备睡觉时点击按钮 🌙';
     }
@@ -367,16 +424,11 @@ function handlePunch() {
   const now = new Date().toISOString();
 
   if (!state.sleeping) {
-    // 入睡打卡
     saveState({ sleeping: true, sleepTime: now });
-    showToast('🌙 晚安，好梦！');} else {
-    // 醒来打卡
+    showToast('🌙 晚安，好梦！');
+  } else {
     const records = loadRecords();
-    records.push({
-      id: Date.now(),
-      sleep: state.sleepTime,
-      wake: now
-    });
+    records.push({ id: Date.now(), sleep: state.sleepTime, wake: now });
     saveRecords(records);
     saveState({ sleeping: false });
     showToast('☀️ 早安！记录已保存');
@@ -386,7 +438,6 @@ function handlePunch() {
 function adjustTime(minutes) {
   const state = loadState();
   if (!state.sleeping) {
-    // 调整最后一条记录
     const records = loadRecords();
     if (records.length === 0) return showToast('没有可调整的记录');
     const last = records[records.length - 1];
@@ -395,7 +446,6 @@ function adjustTime(minutes) {
     saveRecords(records);
     showToast(`已调整醒来时间 ${minutes > 0 ? '+' : ''}${minutes}分钟`);
   } else {
-    // 调整入睡时间
     state.sleepTime = new Date(new Date(state.sleepTime).getTime() + minutes * 60000).toISOString();
     saveState(state);
     showToast(`已调整入睡时间 ${minutes > 0 ? '+' : ''}${minutes}分钟`);
@@ -403,25 +453,52 @@ function adjustTime(minutes) {
   updatePunchUI();
 }
 
-// ==================== 手动记录 ====================
+// ==================== 手动/编辑 记录弹窗 ====================
+let editingRecordId = null;
+
 function openManualModal() {
+  editingRecordId = null;
+  document.getElementById('modalTitle').textContent = '📝 手动记录睡眠';
+
   const now = new Date();
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(23, 0, 0, 0);
   now.setHours(7, 30, 0, 0);
 
-  const toLocalISO = d => {
-    const pad = n => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  };
   document.getElementById('manualSleep').value = toLocalISO(yesterday);
   document.getElementById('manualWake').value = toLocalISO(now);
+
+  document.getElementById('modalBtns').innerHTML = `
+    <button class="btn-cancel" onclick="closeManualModal()">取消</button>
+    <button class="btn-confirm" onclick="saveManualRecord()">保存</button>`;
+
   document.getElementById('manualModal').classList.add('show');
 }
+
+function openEditModal(id) {
+  editingRecordId = id;
+  const records = loadRecords();
+  const rec = records.find(r => r.id === id);
+  if (!rec) return;
+
+  document.getElementById('modalTitle').textContent = '✏️ 编辑睡眠记录';
+  document.getElementById('manualSleep').value = toLocalISO(new Date(rec.sleep));
+  document.getElementById('manualWake').value = toLocalISO(new Date(rec.wake));
+
+  document.getElementById('modalBtns').innerHTML = `
+    <button class="btn-cancel" onclick="closeManualModal()">取消</button>
+    <button class="btn-danger" onclick="deleteRecord(${id})">删除</button>
+    <button class="btn-confirm" onclick="saveManualRecord()">保存</button>`;
+
+  document.getElementById('manualModal').classList.add('show');
+}
+
 function closeManualModal() {
   document.getElementById('manualModal').classList.remove('show');
+  editingRecordId = null;
 }
+
 function saveManualRecord() {
   const sleep = document.getElementById('manualSleep').value;
   const wake = document.getElementById('manualWake').value;
@@ -430,13 +507,85 @@ function saveManualRecord() {
   const wakeTime = new Date(wake).toISOString();
   if (calcDuration(sleepTime, wakeTime) <= 0) return showToast('醒来时间需晚于入睡时间');
   if (calcDuration(sleepTime, wakeTime) > 24) return showToast('睡眠时间不能超过24小时');
+
   const records = loadRecords();
-  records.push({ id: Date.now(), sleep: sleepTime, wake: wakeTime });
+
+  if (editingRecordId !== null) {
+    const idx = records.findIndex(r => r.id === editingRecordId);
+    if (idx !== -1) {
+      records[idx].sleep = sleepTime;
+      records[idx].wake = wakeTime;
+    }
+  } else {
+    records.push({ id: Date.now(), sleep: sleepTime, wake: wakeTime });
+  }
+
   records.sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
   saveRecords(records);
   closeManualModal();
-  showToast('✅ 记录已保存');
+  showToast(editingRecordId ? '✅ 记录已更新' : '✅ 记录已保存');editingRecordId = null;renderHistory();
   updatePunchUI();
+}
+
+function deleteRecord(id) {
+  if (!confirm('确定删除这条记录吗？')) return;
+  const records = loadRecords().filter(r => r.id !== id);
+  saveRecords(records);
+  closeManualModal();
+  renderHistory();
+  updatePunchUI();
+  showToast('已删除');
+}
+
+// ==================== 导出 / 导入 ====================
+function exportData() {
+  const records = localStorage.getItem(STORAGE_KEY) || '[]';
+  const blob = new Blob([records], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `sleep-data-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('📤 数据已导出');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if (Array.isArray(data)) {
+          const existing = loadRecords();
+          const existingIds = new Set(existing.map(r => r.id));
+          let added = 0;
+          data.forEach(r => {
+            if (r.sleep && r.wake && !existingIds.has(r.id)) {
+              existing.push({ id: r.id || Date.now() + Math.random(), sleep: r.sleep, wake: r.wake });
+              added++;
+            }
+          });
+          existing.sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
+          saveRecords(existing);
+          showToast(`📥 导入成功，新增 ${added} 条记录`);
+          renderHistory();
+          updatePunchUI();
+        } else {
+          showToast('❌ 文件格式错误');
+        }
+      } catch { showToast('❌ 文件解析失败'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 // ==================== 记录列表 ====================
@@ -452,63 +601,59 @@ function renderHistory() {
   container.innerHTML = records.map(r => {
     const dur = calcDuration(r.sleep, r.wake);
     return `
-      <div class="record-card">
+      <div class="record-card" onclick="openEditModal(${r.id})">
         <div class="record-left">
           <div class="record-date">${fmt(r.sleep, 'MM月dd日')} ${fmt(r.sleep, 'weekday')}</div>
           <div class="record-times">
-            <span>🌙 ${fmt(r.sleep, 'HH:mm')}</span>
-            <span>☀️ ${fmt(r.wake, 'HH:mm')}</span>
+            <span>🌙 ${toAmPm(r.sleep)}</span>
+            <span>☀️ ${toAmPm(r.wake)}</span>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="record-duration ${durationClass(dur)}">
-            ${durationText(dur)}
-          </div>
-          <button class="delete-btn" onclick="deleteRecord(${r.id})">✕</button>
+        <div class="record-duration ${durationClass(dur)}">
+          ${durationText(dur)}
         </div>
       </div>`;
   }).join('');
 }
 
-function deleteRecord(id) {
-  if (!confirm('确定删除这条记录吗？')) return;
-  const records = loadRecords().filter(r => r.id !== id);
-  saveRecords(records);
-  renderHistory();
-  updatePunchUI();
-  showToast('已删除');
+// ==================== 图表 ====================
+let weeklyChart = null;
+let ganttChart = null;
+
+function getWeekMonday(dateStr) {
+  const d = new Date(dateStr);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(d);
+  mon.setDate(diff);
+  mon.setHours(0, 0, 0, 0);
+  return mon;
 }
 
-// ==================== 图表 ====================
-let durationChart = null;
-let timeChart = null;
-
 function renderCharts() {
-  const records = loadRecords().slice(-14); // 最近14条
+  const records = loadRecords();
+
   if (records.length === 0) {
-    document.getElementById('statsGrid').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="icon">📊</div>记录超过2天后<br>这里会显示统计图表</div>';
+    document.getElementById('statsGrid').innerHTML =
+      '<div class="empty-state" style="grid-column:1/-1"><div class="icon">📊</div>记录数据后<br>这里会显示统计图表</div>';
     return;
   }
 
-  //---- 统计卡片 ----
+  // --- 统计卡片 ---
   const allDurations = records.map(r => calcDuration(r.sleep, r.wake));
   const avgDur = allDurations.reduce((a, b) => a + b, 0) / allDurations.length;
+
   const avgSleepHour = records.reduce((sum, r) => {
     const d = new Date(r.sleep);
     let h = d.getHours() + d.getMinutes() / 60;
-    if (h < 12) h += 24; // 把凌晨当作24+
+    if (h < 18) h += 24;
     return sum + h;
   }, 0) / records.length;
+
   const avgWakeHour = records.reduce((sum, r) => {
     const d = new Date(r.wake);
     return sum + d.getHours() + d.getMinutes() / 60;
   }, 0) / records.length;
-
-  const fmtAvgTime = h => {
-    const hh = Math.floor(h % 24);
-    const mm = Math.round((h % 1) * 60);
-    return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
-  };
 
   document.getElementById('statsGrid').innerHTML = `
     <div class="stat-card">
@@ -520,30 +665,41 @@ function renderCharts() {
       <div class="stat-label">累计记录天数</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" style="font-size:22px">${fmtAvgTime(avgSleepHour)}</div>
+      <div class="stat-value" style="font-size:20px">${hourToAmPm(avgSleepHour)}</div>
       <div class="stat-label">平均入睡时间</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" style="font-size:22px">${fmtAvgTime(avgWakeHour)}</div>
+      <div class="stat-value" style="font-size:20px">${hourToAmPm(avgWakeHour)}</div>
       <div class="stat-label">平均醒来时间</div>
-    </div>
-  `;
-
-  const labels = records.map(r => fmt(r.sleep, 'MM/dd'));
-  const durations = allDurations.map(d => Math.round(d * 100) / 100);
+    </div>`;
 
   const chartFontColor = '#94a3b8';
   const gridColor = 'rgba(148,163,184,0.1)';
 
-  // ---- 时长柱状图 ----
-  if (durationChart) durationChart.destroy();
-  durationChart = new Chart(document.getElementById('durationChart'), {
+  // ===== 每周平均睡眠时长 =====
+  const weekMap = new Map();
+  records.forEach(r => {
+    const mon = getWeekMonday(r.sleep);
+    const key = mon.getTime();
+    if (!weekMap.has(key)) weekMap.set(key, { mon, durations: [] });
+    weekMap.get(key).durations.push(calcDuration(r.sleep, r.wake));
+  });
+
+  const weeks = Array.from(weekMap.values()).sort((a, b) => a.mon - b.mon).slice(-12);
+  const weekLabels = weeks.map(w => `${w.mon.getMonth()+1}/${w.mon.getDate()}`);
+  const weekAvgs = weeks.map(w => {
+    const avg = w.durations.reduce((a, b) => a + b, 0) / w.durations.length;
+    return Math.round(avg * 100) / 100;
+  });
+
+  if (weeklyChart) weeklyChart.destroy();
+  weeklyChart = new Chart(document.getElementById('weeklyChart'), {
     type: 'bar',
     data: {
-      labels,
+      labels: weekLabels,
       datasets: [{
-        data: durations,
-        backgroundColor: durations.map(d =>
+        data: weekAvgs,
+        backgroundColor: weekAvgs.map(d =>
           d >= 7 && d <= 9 ? 'rgba(52,211,153,0.7)' :
           d >= 6 ? 'rgba(251,191,36,0.7)' : 'rgba(248,113,113,0.7)'),
         borderRadius: 6,
@@ -552,13 +708,18 @@ function renderCharts() {
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: false },
-        tooltip: { callbacks: { label: ctx => durationText(ctx.raw) } }
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `平均 ${durationText(ctx.raw)}` } }
       },
       scales: {
-        x: { ticks: { color: chartFontColor, font: { size: 10 } }, grid: { display: false } },
+        x: {
+          title: { display: true, text: '周一日期', color: chartFontColor, font: { size: 11 } },
+          ticks: { color: chartFontColor, font: { size: 10 } },
+          grid: { display: false }
+        },
         y: {
-          min: 0, max: 14,
+          min: 0, max: 12,
           ticks: { color: chartFontColor, stepSize: 2 },
           grid: { color: gridColor }
         }
@@ -566,63 +727,73 @@ function renderCharts() {
     }
   });
 
-  // ---- 时间趋势线 ----
-  const sleepHours = records.map(r => {
-    const d = new Date(r.sleep);
-    let h = d.getHours() + d.getMinutes() / 60;
-    if (h < 12) h += 24;
-    return Math.round(h * 100) / 100;
-  });
-  const wakeHours = records.map(r => {
-    const d = new Date(r.wake);
-    let h = d.getHours() + d.getMinutes() / 60;
-    return Math.round(h * 100) / 100;
+  // ===== 甘特图 =====
+  const ganttRecords = records.slice(-21); // 最近21天
+
+  const ganttLabels = ganttRecords.map(r => fmt(r.sleep, 'MM/dd'));
+
+  const ganttData = ganttRecords.map(r => {
+    const sd = new Date(r.sleep);
+    let sh = sd.getHours() + sd.getMinutes() / 60;
+    if (sh < 18) sh += 24;
+
+    const wd = new Date(r.wake);
+    let wh = wd.getHours() + wd.getMinutes() / 60;
+    if (wh < 18) wh += 24;
+    if (wh < sh) wh += 24;
+
+    return [sh, wh];
   });
 
-  if (timeChart) timeChart.destroy();
-  timeChart = new Chart(document.getElementById('timeChart'), {
-    type: 'line',
+  const ganttColors = ganttRecords.map(r => {
+    const dur = calcDuration(r.sleep, r.wake);
+    return dur >= 7 ? 'rgba(250, 204, 21, 0.75)' : 'rgba(251, 146, 60, 0.85)';
+  });
+
+  if (ganttChart) ganttChart.destroy();
+  ganttChart = new Chart(document.getElementById('ganttChart'), {
+    type: 'bar',
     data: {
-      labels,
-      datasets: [
-        {
-          label: '入睡',
-          data: sleepHours,
-          borderColor: '#818cf8',
-          backgroundColor: 'rgba(129,140,248,0.1)',
-          tension: 0.3, fill: false,pointRadius: 4, pointBackgroundColor: '#818cf8',},
-        {
-          label: '醒来',
-          data: wakeHours,
-          borderColor: '#fbbf24',
-          backgroundColor: 'rgba(251,191,36,0.1)',
-          tension: 0.3, fill: false,
-          pointRadius: 4, pointBackgroundColor: '#fbbf24',
-        }
-      ]
+      labels: ganttLabels,
+      datasets: [{
+        data: ganttData,
+        backgroundColor: ganttColors,
+        borderRadius: 4,
+        borderSkipped: false,
+        barPercentage: 0.6,
+      }]
     },
     options: {
       responsive: true,
+      indexAxis: 'x',
       plugins: {
-        legend: { labels: { color: chartFontColor, usePointStyle: true, pointStyle: 'circle' } },
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: ctx => {
-              let h = ctx.raw;
-              if (h >= 24) h -= 24;
-              return `${ctx.dataset.label}: ${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+              const [s, w] = ctx.raw;
+              return `${hourToAmPm(s)} → ${hourToAmPm(w)}  (${durationText(w - s)})`;
             }
           }
         }
       },
       scales: {
-        x: { ticks: { color: chartFontColor, font: { size: 10 } }, grid: { display: false } },
+        x: {
+          ticks: { color: chartFontColor, font: { size: 10 }, maxRotation: 45 },
+          grid: { display: false }
+        },
         y: {
+          reverse: true,
+          min: Math.floor(Math.min(...ganttData.map(d => d[0]))) - 0.5,
+          max: Math.ceil(Math.max(...ganttData.map(d => d[1]))) + 0.5,
           ticks: {
             color: chartFontColor,
+            stepSize: 1,
             callback: v => {
-              let h = v; if (h >= 24) h -= 24;
-              return `${Math.floor(h)}:00`;
+              let h = v % 24;
+              const ampm = h >= 12 ? 'PM' : 'AM';
+              h = h % 12 || 12;
+              return `${h} ${ampm}`;
             }
           },
           grid: { color: gridColor }
@@ -637,13 +808,11 @@ function switchTab(name, el) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  el.classList.add('active');
-
-  if (name === 'history') renderHistory();
-  if (name === 'chart') { renderHistory(); renderCharts(); }
+  el.classList.add('active');if (name === 'history') renderHistory();
+  if (name === 'chart') renderCharts();
 }
 
-// ==================== Toast提示 ====================
+// ==================== Toast ====================
 function showToast(msg) {
   const div = document.createElement('div');
   div.textContent = msg;
@@ -655,7 +824,8 @@ function showToast(msg) {
     borderRadius: '12px', fontSize: '14px',
     zIndex: '999', boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
     transition: 'opacity 0.3s', fontWeight: '500',
-    border: '1px solid rgba(255,255,255,0.1)'
+    border: '1px solid rgba(255,255,255,0.1)',
+    whiteSpace: 'nowrap'
   });
   document.body.appendChild(div);
   setTimeout(() => { div.style.opacity = '0'; }, 1800);
