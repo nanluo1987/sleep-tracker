@@ -17,8 +17,6 @@
     --accent-light: #a78bfa;
     --text-primary: #e2e8f0;
     --text-secondary: #94a3b8;
-    --sleep-color: #6366f1;
-    --wake-color: #f59e0b;
     --danger: #ef4444;
   }
   body {
@@ -26,14 +24,11 @@
     background: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
-    overflow-x: hidden;
-    padding-bottom: 80px;
+    overflow-x: hidden;padding-bottom: 80px;
   }
 
-  /*===== 底部导航 ===== */
   .tab-bar {
-    display: flex;
-    position: fixed;
+    display: flex; position: fixed;
     bottom: 0; left: 0; right: 0;
     background: var(--bg-secondary);
     border-top: 1px solid rgba(255,255,255,0.05);
@@ -41,8 +36,7 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
   .tab-btn {
-    flex: 1;
-    padding: 12px 8px;
+    flex: 1; padding: 12px 8px;
     background: none; border: none;
     color: var(--text-secondary);
     font-size: 11px;
@@ -55,29 +49,24 @@
   .tab-page { display: none; padding: 20px 16px; }
   .tab-page.active { display: block; }
 
-  /* ===== 打卡页===== */
+  /*===== 打卡页 ===== */
   .clock-page { text-align: center; padding-top: 40px; }
   .current-time {
     font-size: 52px; font-weight: 200;
     letter-spacing: 2px; margin: 10px 0;
-    font-variant-numeric: tabular-nums;
-  }
+    font-variant-numeric: tabular-nums;}
   .current-ampm {
     font-size: 20px; font-weight: 400;
-    color: var(--accent-light);
-    margin-left: 4px;
+    color: var(--accent-light); margin-left: 4px;
   }
   .current-date { color: var(--text-secondary); font-size: 14px; margin-bottom: 40px; }
   .punch-btn {
     width: 180px; height: 180px;
-    border-radius: 50%;
-    border: none; cursor: pointer;
-    font-size: 20px; font-weight: 600;
-    color: white;
+    border-radius: 50%; border: none; cursor: pointer;
+    font-size: 20px; font-weight: 600; color: white;
     display: inline-flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 8px;
-    transition: all 0.3s; position: relative;
+    align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.3s;
     box-shadow: 0 0 60px rgba(99,102,241,0.3);
   }
   .punch-btn.sleep-btn { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
@@ -96,19 +85,15 @@
     color: var(--accent-light); font-weight: 600; font-size: 16px;
   }
   .quick-adjust {
-    margin-top: 20px;
-    display: flex; gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
+    margin-top: 20px; display: flex; gap: 8px;
+    justify-content: center; flex-wrap: wrap;
   }
   .adjust-btn {
     background: var(--bg-card);
     border: 1px solid rgba(255,255,255,0.08);
     color: var(--text-secondary);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    cursor: pointer;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; cursor: pointer;
   }
   .adjust-btn:active { background: var(--accent); color: white; }
 
@@ -124,38 +109,24 @@
     display: flex; align-items: center;
     justify-content: space-between;
     border: 1px solid rgba(255,255,255,0.04);
-    cursor: pointer;
-    transition: border-color 0.2s;
+    cursor: pointer; transition: border-color 0.2s;
   }
-  .record-card:active {
-    border-color: var(--accent-light);
-  }
+  .record-card:active { border-color: var(--accent-light); }
   .record-left { display: flex; flex-direction: column; gap: 6px; }
   .record-date { font-size: 13px; color: var(--text-secondary); }
   .record-times { display: flex; gap: 16px; font-size: 14px; }
   .record-times span { display: flex; align-items: center; gap: 4px; }
-  .record-duration {
-    font-size: 22px; font-weight: 700;
-    color: var(--accent-light);
-  }
-  .record-duration small { font-size: 12px; font-weight: 400; color: var(--text-secondary); }
+  .record-right { display: flex; align-items: center; gap: 10px; }
+  .record-duration { font-size: 22px; font-weight: 700; }
+  .record-edit-hint { font-size: 16px; color: var(--text-secondary); opacity: 0.4; }
   .duration-good { color: #34d399; }
   .duration-warn { color: #fbbf24; }
   .duration-bad { color: #f87171; }
   .empty-state {
     text-align: center; padding: 60px 20px;
-    color: var(--text-secondary);
-  }
+    color: var(--text-secondary);}
   .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
-  .delete-btn {
-    background: none; border: none;
-    color: var(--text-secondary); cursor: pointer;
-    font-size: 18px; padding: 8px;
-    opacity: 0.5;
-  }
-  .delete-btn:active { opacity: 1; color: var(--danger); }
 
-  /* ===== 导出导入按钮 ===== */
   .data-actions {
     display: flex; gap: 10px;
     margin-top: 20px; padding-top: 16px;
@@ -207,8 +178,7 @@
   .modal {
     background: var(--bg-secondary);
     border-radius: 20px;
-    padding: 24px; width: 90%;
-    max-width: 340px;
+    padding: 24px; width: 90%; max-width: 340px;
   }
   .modal h3 { margin-bottom: 20px; text-align: center; }
   .modal label {
@@ -221,25 +191,22 @@
     border: 1px solid rgba(255,255,255,0.1);
     background: var(--bg-card);
     color: var(--text-primary);
-    font-size: 16px;
-    margin-bottom: 16px;
+    font-size: 16px; margin-bottom: 16px;
   }
   .modal-btns { display: flex; gap: 10px; }
   .modal-btns button {
     flex: 1; padding: 12px;
     border-radius: 12px; border: none;
-    font-size: 15px; font-weight: 600;
-    cursor: pointer;}
+    font-size: 14px; font-weight: 600; cursor: pointer;
+  }
   .btn-cancel { background: var(--bg-card); color: var(--text-secondary); }
   .btn-confirm { background: var(--accent); color: white; }
   .btn-danger { background: var(--danger); color: white; }
-  .modal-btns.three-btns { display: flex; gap: 8px; }
-  .modal-btns.three-btns button { padding: 12px 8px; font-size: 13px; }
 </style>
 </head>
 <body>
 
-<!--========== 打卡页 ========== -->
+<!-- 打卡页 -->
 <div id="page-clock" class="tab-page active clock-page">
   <div class="current-date" id="currentDate"></div>
   <div class="current-time" id="currentTime"></div>
@@ -257,7 +224,7 @@
   </div>
 </div>
 
-<!-- ========== 记录页 ========== -->
+<!-- 记录页 -->
 <div id="page-history" class="tab-page">
   <div class="section-title">📋 睡眠记录</div>
   <div id="historyList"></div>
@@ -267,20 +234,21 @@
   </div>
 </div>
 
-<!-- ========== 图表页 ========== -->
+<!-- 图表页 -->
 <div id="page-chart" class="tab-page">
-  <div class="section-title">📊 睡眠统计</div>
+  <div class="section-title">📊睡眠统计</div>
   <div class="stats-grid" id="statsGrid"></div>
   <div class="chart-container">
     <div class="chart-title">📅 每周平均睡眠时长（小时）</div>
     <canvas id="weeklyChart"></canvas>
-  </div><div class="chart-container">
-    <div class="chart-title">🌙 入睡 →☀️ 醒来 甘特图</div>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">🌙 入睡 →☀️ 醒来 甘特图（🟡≥7h  🟠＜7h）</div>
     <canvas id="ganttChart"></canvas>
   </div>
 </div>
 
-<!-- ========== 底部导航 ========== -->
+<!-- 底部导航 -->
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('clock', this)">
     <span class="icon">🕐</span>打卡
@@ -293,7 +261,7 @@
   </button>
 </div>
 
-<!-- ========== 新增/手动 记录弹窗 ========== -->
+<!-- 弹窗 -->
 <div class="modal-overlay" id="manualModal">
   <div class="modal">
     <h3id="modalTitle">📝 手动记录睡眠</h3>
@@ -301,9 +269,9 @@
     <input type="datetime-local" id="manualSleep">
     <label>☀️ 醒来时间</label>
     <input type="datetime-local" id="manualWake">
-    <div class="modal-btns three-btns" id="modalBtns">
+    <div class="modal-btns" id="modalBtns">
       <button class="btn-cancel" onclick="closeManualModal()">取消</button>
-      <button class="btn-confirm" id="modalConfirmBtn" onclick="saveManualRecord()">保存</button>
+      <button class="btn-confirm" onclick="saveManualRecord()">保存</button>
     </div>
   </div>
 </div>
@@ -329,6 +297,20 @@ function saveState(state) {
 }
 
 // ==================== 时间工具 ====================
+
+// 核心：获取一条记录的"逻辑日期"
+// 规则：18:00之前入睡 → 算前一天；18:00之后 → 算当天
+// 例：1月23日凌晨3点入睡→ 逻辑日期 = 1月22日
+function getSleepDate(sleepTimeStr) {
+  const d = new Date(sleepTimeStr);
+  if (d.getHours() < 18) {
+    //凌晨/白天入睡 → 归属前一天
+    d.setDate(d.getDate() - 1);
+  }
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
 function toAmPm(date) {
   const d = new Date(date);
   let h = d.getHours();
@@ -340,22 +322,23 @@ function toAmPm(date) {
 
 function hourToAmPm(decimalHour) {
   let h = Math.floor(decimalHour % 24);
-  const m = Math.round((decimalHour % 1) * 60);
+  if (h < 0) h += 24;
+  const m = Math.round(((decimalHour % 1) + 1) % 1 * 60);
   const ampm = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
   return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
 }
 
-function fmt(date, f) {
-  const d = new Date(date);
-  const pad = n => String(n).padStart(2, '0');
-  const map = {
-    'HH:mm': toAmPm(date),
-    'MM/dd': `${pad(d.getMonth()+1)}/${pad(d.getDate())}`,
-    'MM月dd日': `${d.getMonth()+1}月${d.getDate()}日`,
-    'full': `${d.getMonth()+1}月${d.getDate()}日 ${toAmPm(date)}`,
-    'weekday': ['周日','周一','周二','周三','周四','周五','周六'][d.getDay()],};
-  return map[f] || d.toLocaleString('zh-CN');
+function fmtDate(d) {
+  return `${d.getMonth()+1}月${d.getDate()}日`;
+}
+
+function fmtDateShort(d) {
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+
+function weekdayStr(d) {
+  return ['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
 }
 
 function toLocalISO(d) {
@@ -364,7 +347,7 @@ function toLocalISO(d) {
 }
 
 function calcDuration(sleep, wake) {
-  return (new Date(wake) - new Date(sleep)) / 1000 / 60 / 60;
+  return (new Date(wake) - new Date(sleep)) / 3600000;
 }
 
 function durationText(hours) {
@@ -390,7 +373,7 @@ function updateClock() {
   document.getElementById('currentTime').innerHTML =
     `${h}:${m}:${s} <span class="current-ampm">${ampm}</span>`;
   document.getElementById('currentDate').textContent =
-    `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${fmt(now, 'weekday')}`;
+    `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${weekdayStr(now)}`;
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -404,7 +387,9 @@ function updatePunchUI() {
   if (state.sleeping) {
     btn.className = 'punch-btn wake-btn';
     btn.innerHTML = '<span class="icon">☀️</span><span class="label">醒来打卡</span>';
-    statusText.innerHTML = `已在<span class="time-highlight">${fmt(state.sleepTime, 'full')}</span> 入睡<br>正在睡眠中...💤`;
+    const sd = getSleepDate(state.sleepTime);
+    statusText.innerHTML =
+      `已在<span class="time-highlight">${fmtDate(sd)} ${toAmPm(state.sleepTime)}</span> 入睡<br>正在睡眠中...💤`;
   } else {
     btn.className = 'punch-btn sleep-btn';
     btn.innerHTML = '<span class="icon">🌙</span><span class="label">入睡打卡</span>';
@@ -412,7 +397,8 @@ function updatePunchUI() {
     if (records.length > 0) {
       const last = records[records.length - 1];
       const dur = calcDuration(last.sleep, last.wake);
-      statusText.innerHTML = `上次睡眠: <span class="time-highlight">${durationText(dur)}</span><br>${toAmPm(last.sleep)} → ${toAmPm(last.wake)}`;
+      statusText.innerHTML =
+        `上次睡眠: <span class="time-highlight">${durationText(dur)}</span><br>${toAmPm(last.sleep)} → ${toAmPm(last.wake)}`;
     } else {
       statusText.innerHTML = '今晚还没有打卡哦，准备睡觉时点击按钮 🌙';
     }
@@ -422,11 +408,9 @@ function updatePunchUI() {
 function handlePunch() {
   const state = loadState();
   const now = new Date().toISOString();
-
   if (!state.sleeping) {
     saveState({ sleeping: true, sleepTime: now });
-    showToast('🌙 晚安，好梦！');
-  } else {
+    showToast('🌙 晚安，好梦！');} else {
     const records = loadRecords();
     records.push({ id: Date.now(), sleep: state.sleepTime, wake: now });
     saveRecords(records);
@@ -453,7 +437,7 @@ function adjustTime(minutes) {
   updatePunchUI();
 }
 
-// ==================== 手动/编辑 记录弹窗 ====================
+// ==================== 弹窗（新增 + 编辑） ====================
 let editingRecordId = null;
 
 function openManualModal() {
@@ -464,10 +448,11 @@ function openManualModal() {
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(23, 0, 0, 0);
-  now.setHours(7, 30, 0, 0);
+  const morning = new Date(now);
+  morning.setHours(7, 30, 0, 0);
 
   document.getElementById('manualSleep').value = toLocalISO(yesterday);
-  document.getElementById('manualWake').value = toLocalISO(now);
+  document.getElementById('manualWake').value = toLocalISO(morning);
 
   document.getElementById('modalBtns').innerHTML = `
     <button class="btn-cancel" onclick="closeManualModal()">取消</button>
@@ -500,11 +485,12 @@ function closeManualModal() {
 }
 
 function saveManualRecord() {
-  const sleep = document.getElementById('manualSleep').value;
-  const wake = document.getElementById('manualWake').value;
-  if (!sleep || !wake) return showToast('请填写完整时间');
-  const sleepTime = new Date(sleep).toISOString();
-  const wakeTime = new Date(wake).toISOString();
+  const sleepVal = document.getElementById('manualSleep').value;
+  const wakeVal = document.getElementById('manualWake').value;
+  if (!sleepVal || !wakeVal) return showToast('请填写完整时间');
+
+  const sleepTime = new Date(sleepVal).toISOString();
+  const wakeTime = new Date(wakeVal).toISOString();
   if (calcDuration(sleepTime, wakeTime) <= 0) return showToast('醒来时间需晚于入睡时间');
   if (calcDuration(sleepTime, wakeTime) > 24) return showToast('睡眠时间不能超过24小时');
 
@@ -523,7 +509,7 @@ function saveManualRecord() {
   records.sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
   saveRecords(records);
   closeManualModal();
-  showToast(editingRecordId ? '✅ 记录已更新' : '✅ 记录已保存');editingRecordId = null;renderHistory();
+  showToast(editingRecordId !== null ? '✅ 记录已更新' : '✅ 记录已保存');editingRecordId = null;renderHistory();
   updatePunchUI();
 }
 
@@ -600,17 +586,19 @@ function renderHistory() {
 
   container.innerHTML = records.map(r => {
     const dur = calcDuration(r.sleep, r.wake);
+    const sd = getSleepDate(r.sleep);
     return `
       <div class="record-card" onclick="openEditModal(${r.id})">
         <div class="record-left">
-          <div class="record-date">${fmt(r.sleep, 'MM月dd日')} ${fmt(r.sleep, 'weekday')}</div>
+          <div class="record-date">${fmtDate(sd)} ${weekdayStr(sd)}</div>
           <div class="record-times">
             <span>🌙 ${toAmPm(r.sleep)}</span>
             <span>☀️ ${toAmPm(r.wake)}</span>
           </div>
         </div>
-        <div class="record-duration ${durationClass(dur)}">
-          ${durationText(dur)}
+        <div class="record-right">
+          <div class="record-duration ${durationClass(dur)}">${durationText(dur)}</div>
+          <div class="record-edit-hint">✏️</div>
         </div>
       </div>`;
   }).join('');
@@ -620,14 +608,23 @@ function renderHistory() {
 let weeklyChart = null;
 let ganttChart = null;
 
-function getWeekMonday(dateStr) {
-  const d = new Date(dateStr);
+function getWeekMonday(date) {
+  const d = new Date(date);
   const day = d.getDay();
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   const mon = new Date(d);
   mon.setDate(diff);
   mon.setHours(0, 0, 0, 0);
   return mon;
+}
+
+//把入睡时间转为连续小时数（以18:00为基准0点）
+// 这样 22:00→22, 01:00→25, 09:00→33
+function toGanttHour(dateStr) {
+  const d = new Date(dateStr);
+  let h = d.getHours() + d.getMinutes() / 60;
+  if (h < 18) h += 24; // 凌晨的时间+24，保证连续
+  return h;
 }
 
 function renderCharts() {
@@ -639,7 +636,7 @@ function renderCharts() {
     return;
   }
 
-  // --- 统计卡片 ---
+  // ==== 统计卡片 ====
   const allDurations = records.map(r => calcDuration(r.sleep, r.wake));
   const avgDur = allDurations.reduce((a, b) => a + b, 0) / allDurations.length;
 
@@ -652,7 +649,8 @@ function renderCharts() {
 
   const avgWakeHour = records.reduce((sum, r) => {
     const d = new Date(r.wake);
-    return sum + d.getHours() + d.getMinutes() / 60;
+    let h = d.getHours() + d.getMinutes() / 60;
+    return sum + h;
   }, 0) / records.length;
 
   document.getElementById('statsGrid').innerHTML = `
@@ -676,17 +674,18 @@ function renderCharts() {
   const chartFontColor = '#94a3b8';
   const gridColor = 'rgba(148,163,184,0.1)';
 
-  // ===== 每周平均睡眠时长 =====
+  // ==== 每周平均睡眠时长 ====
   const weekMap = new Map();
   records.forEach(r => {
-    const mon = getWeekMonday(r.sleep);
+    const sd = getSleepDate(r.sleep);
+    const mon = getWeekMonday(sd);
     const key = mon.getTime();
     if (!weekMap.has(key)) weekMap.set(key, { mon, durations: [] });
     weekMap.get(key).durations.push(calcDuration(r.sleep, r.wake));
   });
 
   const weeks = Array.from(weekMap.values()).sort((a, b) => a.mon - b.mon).slice(-12);
-  const weekLabels = weeks.map(w => `${w.mon.getMonth()+1}/${w.mon.getDate()}`);
+  const weekLabels = weeks.map(w => fmtDateShort(w.mon));
   const weekAvgs = weeks.map(w => {
     const avg = w.durations.reduce((a, b) => a + b, 0) / w.durations.length;
     return Math.round(avg * 100) / 100;
@@ -715,8 +714,7 @@ function renderCharts() {
       scales: {
         x: {
           title: { display: true, text: '周一日期', color: chartFontColor, font: { size: 11 } },
-          ticks: { color: chartFontColor, font: { size: 10 } },
-          grid: { display: false }
+          ticks: { color: chartFontColor, font: { size: 10 } },grid: { display: false }
         },
         y: {
           min: 0, max: 12,
@@ -727,28 +725,34 @@ function renderCharts() {
     }
   });
 
-  // ===== 甘特图 =====
-  const ganttRecords = records.slice(-21); // 最近21天
+  // ==== 甘特图 ====
+  const ganttRecords = records.slice(-21);
 
-  const ganttLabels = ganttRecords.map(r => fmt(r.sleep, 'MM/dd'));
+  // x轴标签：用逻辑日期
+  const ganttLabels = ganttRecords.map(r => {
+    const sd = getSleepDate(r.sleep);
+    return fmtDateShort(sd);
+  });
 
+  // y轴数据：[入睡小时, 醒来小时]，连续刻度
   const ganttData = ganttRecords.map(r => {
-    const sd = new Date(r.sleep);
-    let sh = sd.getHours() + sd.getMinutes() / 60;
-    if (sh < 18) sh += 24;
-
-    const wd = new Date(r.wake);
-    let wh = wd.getHours() + wd.getMinutes() / 60;
-    if (wh < 18) wh += 24;
-    if (wh < sh) wh += 24;
-
+    const sh = toGanttHour(r.sleep);
+    let wh = toGanttHour(r.wake);
+    // 确保醒来 > 入睡
+    if (wh <= sh) wh += 24;
     return [sh, wh];
   });
 
   const ganttColors = ganttRecords.map(r => {
     const dur = calcDuration(r.sleep, r.wake);
-    return dur >= 7 ? 'rgba(250, 204, 21, 0.75)' : 'rgba(251, 146, 60, 0.85)';
+    return dur >= 7 ? 'rgba(250, 204, 21, 0.8)' : 'rgba(251, 146, 60, 0.9)';
   });
+
+  //计算 y 轴范围
+  const allSh = ganttData.map(d => d[0]);
+  const allWh = ganttData.map(d => d[1]);
+  const yMin = Math.floor(Math.min(...allSh)) - 0.5;
+  const yMax = Math.ceil(Math.max(...allWh)) + 0.5;
 
   if (ganttChart) ganttChart.destroy();
   ganttChart = new Chart(document.getElementById('ganttChart'), {
@@ -760,7 +764,7 @@ function renderCharts() {
         backgroundColor: ganttColors,
         borderRadius: 4,
         borderSkipped: false,
-        barPercentage: 0.6,
+        barPercentage: 0.55,
       }]
     },
     options: {
@@ -770,27 +774,28 @@ function renderCharts() {
         legend: { display: false },
         tooltip: {
           callbacks: {
+            title: (items) => ganttLabels[items[0].dataIndex],
             label: ctx => {
               const [s, w] = ctx.raw;
-              return `${hourToAmPm(s)} → ${hourToAmPm(w)}  (${durationText(w - s)})`;
+              return `🌙 ${hourToAmPm(s)}→  ☀️ ${hourToAmPm(w)}  （${durationText(w - s)}）`;
             }
           }
         }
       },
       scales: {
         x: {
-          ticks: { color: chartFontColor, font: { size: 10 }, maxRotation: 45 },
+          ticks: { color: chartFontColor, font: { size: 10 }, maxRotation: 50, minRotation: 30 },
           grid: { display: false }
         },
         y: {
           reverse: true,
-          min: Math.floor(Math.min(...ganttData.map(d => d[0]))) - 0.5,
-          max: Math.ceil(Math.max(...ganttData.map(d => d[1]))) + 0.5,
+          min: yMin,
+          max: yMax,
           ticks: {
             color: chartFontColor,
             stepSize: 1,
             callback: v => {
-              let h = v % 24;
+              let h = ((v % 24) + 24) % 24;
               const ampm = h >= 12 ? 'PM' : 'AM';
               h = h % 12 || 12;
               return `${h} ${ampm}`;
@@ -824,8 +829,7 @@ function showToast(msg) {
     borderRadius: '12px', fontSize: '14px',
     zIndex: '999', boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
     transition: 'opacity 0.3s', fontWeight: '500',
-    border: '1px solid rgba(255,255,255,0.1)',
-    whiteSpace: 'nowrap'
+    border: '1px solid rgba(255,255,255,0.1)',whiteSpace: 'nowrap'
   });
   document.body.appendChild(div);
   setTimeout(() => { div.style.opacity = '0'; }, 1800);
