@@ -537,7 +537,7 @@
   </div>
 
   <div class="quick-adjust">
-    <button class="adjust-btn" onclick="openManualModal()">✏️ 手动记录</button>
+    <button class="adjust-btn" onclick="openManualModal()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> 手动记录</button>
     <button class="adjust-btn" onclick="adjustTime(-15)">← 前推15分钟</button>
     <button class="adjust-btn" onclick="adjustTime(15)">→ 后推15分钟</button>
   </div>
@@ -914,7 +914,7 @@ function renderHistory() {
         </div>
         <div class="record-right">
           <div class="record-duration ${durationClass(dur)}">${durationText(dur)}</div>
-          <div class="record-edit-icon">✏️</div>
+          <div class="record-edit-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
         </div>
       </div>`;
   }).join('');
