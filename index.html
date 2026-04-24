@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="睡眠打卡">
+<meta name="theme-color" content="#c96442">
 <title>🌙 睡眠打卡</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
@@ -466,6 +470,49 @@
     from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
+
+  /* ===== OFFLINE BANNER ===== */
+  .offline-banner {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0;
+    background: var(--yellow); color: white;
+    text-align: center; font-size: 12px; font-weight: 600;
+    padding: 6px 16px;
+    z-index: 998;
+    letter-spacing: 0.04em;
+  }
+  body.offline .offline-banner { display: block; }
+  body.offline { padding-top: 28px; }
+
+  /* ===== INSTALL PROMPT ===== */
+  .install-banner {
+    display: none;
+    position: fixed; bottom: 80px; left: 16px; right: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-lg);
+    z-index: 300;
+    align-items: center; gap: 12px;
+    animation: toastIn 0.22s ease;
+  }
+  .install-banner.show { display: flex; }
+  .install-banner-text { flex: 1; }
+  .install-banner-text strong { font-size: 13px; display: block; margin-bottom: 2px; }
+  .install-banner-text span { font-size: 11px; color: var(--text-secondary); }
+  .install-btn {
+    background: var(--accent); color: white;
+    border: none; border-radius: var(--radius-sm);
+    padding: 8px 14px; font-size: 12px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .install-dismiss {
+    background: none; border: none;
+    color: var(--text-tertiary); font-size: 16px;
+    cursor: pointer; padding: 4px; line-height: 1;
+  }
 </style>
 </head>
 <body>
@@ -526,6 +573,19 @@
 </div>
 
 <!-- 底部导航 -->
+<!-- 离线提示条 -->
+<div class="offline-banner">📡 当前处于离线状态，数据仍可正常记录</div>
+
+<!-- 安装提示 -->
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-text">
+    <strong>🌙 添加到主屏幕</strong>
+    <span>像原生 App 一样使用，随时打卡</span>
+  </div>
+  <button class="install-btn" onclick="doInstall()">安装</button>
+  <button class="install-dismiss" onclick="dismissInstall()">×</button>
+</div>
+
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('clock', this)">
     <span class="tab-icon">🕐</span>打卡
@@ -1016,6 +1076,55 @@ function showToast(msg) {
 
 // ==================== 初始化 ====================
 updatePunchUI();
+
+// ==================== PWA：Service Worker 注册 ====================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered, scope:', reg.scope))
+      .catch(err => console.warn('SW registration failed:', err));
+  });
+}
+
+// ==================== PWA：离线状态检测 ====================
+function updateOnlineStatus() {
+  document.body.classList.toggle('offline', !navigator.onLine);
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
+
+// ==================== PWA：安装提示 ====================
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // 如果用户没有永久关闭过提示，就显示
+  if (!localStorage.getItem('pwa_install_dismissed')) {
+    setTimeout(() => document.getElementById('installBanner').classList.add('show'), 2000);
+  }
+});
+
+function doInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(choice => {
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.remove('show');
+    if (choice.outcome === 'accepted') showToast('🎉 已添加到主屏幕！');
+  });
+}
+
+function dismissInstall() {
+  document.getElementById('installBanner').classList.remove('show');
+  localStorage.setItem('pwa_install_dismissed', '1');
+}
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  document.getElementById('installBanner').classList.remove('show');
+});
 </script>
 </body>
 </html>

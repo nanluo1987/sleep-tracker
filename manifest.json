@@ -1,0 +1,25 @@
+{
+  "name": "睡眠打卡",
+  "short_name": "睡眠打卡",
+  "description": "记录你的睡眠时间，养成规律作息",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#c96442",
+  "background_color": "#f5f4f0",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
