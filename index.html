@@ -10,20 +10,18 @@
 <title>🌙 睡眠打卡</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+<!--✅ 删掉了 Google Fonts 的两行link -->
+<!--✅ 删掉了 Chart.js 的 script 标签 -->
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    /* Claude-inspired warm palette */
-    --bg-base:       #f5f4f0;
+    --bg-base:#f5f4f0;
     --bg-surface:    #faf9f6;
     --bg-card:       #ffffff;
     --bg-sidebar:    #ede9e3;
 
-    --accent:        #c96442;   /* Claude's warm terracotta */
+    --accent:        #c96442;
     --accent-hover:  #b5562f;
     --accent-muted:  #f0e6e0;
     --accent-soft:   rgba(201, 100, 66, 0.12);
@@ -35,7 +33,7 @@
     --text-secondary:#78716c;
     --text-tertiary: #a8a29e;
 
-    --border:        #e5e0d8;
+    --border:#e5e0d8;
     --border-strong: #d0c9be;
 
     --green:         #3b7c5e;
@@ -54,7 +52,8 @@
   }
 
   body {
-    font-family: 'DM Sans', -apple-system, sans-serif;
+    /*✅ 改用系统字体栈，无需下载 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
     background: var(--bg-base);
     color: var(--text-primary);
     min-height: 100vh;
@@ -70,7 +69,7 @@
     bottom: env(safe-area-inset-bottom, 12px);
     left: 12px; right: 12px;
     background: var(--bg-surface);
-    border: 1px solid var(--border);
+    border:1px solid var(--border);
     border-radius: 20px;
     z-index: 100;
     box-shadow: 0 4px 20px rgba(28,25,23,0.10), 0 1px 4px rgba(28,25,23,0.06);
@@ -80,7 +79,7 @@
     flex: 1; padding: 11px 8px 10px;
     background: none; border: none;
     color: var(--text-tertiary);
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
     font-size: 11px; font-weight: 500;
     letter-spacing: 0.02em;
     display: flex; flex-direction: column;
@@ -98,10 +97,8 @@
 
   /* ===== PAGE HEADER ===== */
   .page-header {
-    margin-bottom: 24px;
-  }
+    margin-bottom: 24px;}
   .page-header h2 {
-    font-family: 'Lora', serif;
     font-size: 22px; font-weight: 600;
     color: var(--text-primary);
     letter-spacing: -0.01em;
@@ -123,7 +120,6 @@
     margin-bottom: 10px;
   }
   .current-time {
-    font-family: 'Lora', serif;
     font-size: 56px; font-weight: 500;
     color: var(--text-primary);
     letter-spacing: -1px;
@@ -131,12 +127,10 @@
     font-variant-numeric: tabular-nums;
   }
   .current-ampm {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 18px; font-weight: 400;
+    font-size: 16px; font-weight: 400;
     color: var(--text-secondary);
     margin-left: 4px;
     vertical-align: super;
-    font-size: 16px;
   }
   .current-date {
     color: var(--text-secondary); font-size: 14px;
@@ -190,7 +184,7 @@
   }
   .punch-btn .btn-icon { font-size: 38px; line-height: 1; }
   .punch-btn .btn-label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
     font-size: 14px; font-weight: 600;
     letter-spacing: 0.01em;
   }
@@ -225,7 +219,7 @@
     border: 1px solid var(--border);
     color: var(--text-secondary);
     padding: 7px 14px; border-radius: var(--radius-pill);
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
     font-size: 12px; font-weight: 500;
     cursor: pointer;
     transition: all 0.15s;
@@ -278,9 +272,7 @@
   .record-times span { display: flex; align-items: center; gap: 4px; }
   .record-right { display: flex; align-items: center; gap: 12px; }
   .record-duration {
-    font-family: 'Lora', serif;
-    font-size: 20px; font-weight: 600;
-  }
+    font-size: 20px; font-weight: 600;}
   .record-edit-icon {
     font-size: 14px; color: var(--text-tertiary); opacity: 0.6;
   }
@@ -305,7 +297,7 @@
   .data-btn {
     flex: 1; padding: 12px;
     border-radius: var(--radius); border: 1px solid var(--border);
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
     font-size: 13px; font-weight: 600;
     cursor: pointer; display: flex;
     align-items: center; justify-content: center; gap: 6px;
@@ -314,8 +306,7 @@
   }
   .data-btn.export-btn {
     background: var(--bg-card);
-    color: var(--text-secondary);
-  }
+    color: var(--text-secondary);}
   .data-btn.export-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
@@ -346,7 +337,6 @@
     box-shadow: var(--shadow-sm);
   }
   .stat-value {
-    font-family: 'Lora', serif;
     font-size: 26px; font-weight: 600;
     color: var(--text-primary);
     line-height: 1;
@@ -367,8 +357,13 @@
   }
   .chart-title {
     font-size: 12px; color: var(--text-tertiary);
-    margin-bottom: 14px; font-weight: 600;
-    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 14px; font-weight: 600;letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  /*✅ 图表加载提示 */
+  .chart-loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-tertiary);font-size: 13px;
   }
 
   /* ===== MODAL ===== */
@@ -397,7 +392,6 @@
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
   .modal h3 {
-    font-family: 'Lora', serif;
     font-size: 18px; font-weight: 600;
     margin-bottom: 22px; text-align: center;
     color: var(--text-primary);
@@ -413,11 +407,10 @@
     border: 1px solid var(--border);
     background: var(--bg-card);
     color: var(--text-primary);
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
     font-size: 15px; margin-bottom: 18px;
     outline: none;
-    transition: border-color 0.15s;
-    box-shadow: var(--shadow-sm) inset;
+    transition: border-color 0.15s;box-shadow: var(--shadow-sm) inset;
   }
   .modal input[type="datetime-local"]:focus {
     border-color: var(--accent);
@@ -427,10 +420,9 @@
   .modal-btns button {
     flex: 1; padding: 12px;
     border-radius: var(--radius-sm); border: 1px solid var(--border);
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
     font-size: 14px; font-weight: 600; cursor: pointer;
-    transition: all 0.15s;
-  }
+    transition: all 0.15s;}
   .btn-cancel {
     background: var(--bg-base);
     color: var(--text-secondary);
@@ -448,13 +440,11 @@
   }
   .btn-danger:hover { background: #f9d5d3; }
 
-  /* ===== DIVIDER ===== */
   .divider {
     height: 1px; background: var(--border);
     margin: 20px 0;
   }
 
-  /* ===== TOAST ===== */
   .toast {
     position: fixed; top: 56px; left: 50%;
     transform: translateX(-50%);
@@ -473,7 +463,6 @@
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 
-  /* ===== OFFLINE BANNER ===== */
   .offline-banner {
     display: none;
     position: fixed; top: 0; left: 0; right: 0;
@@ -486,7 +475,6 @@
   body.offline .offline-banner { display: block; }
   body.offline { padding-top: 28px; }
 
-  /* ===== INSTALL PROMPT ===== */
   .install-banner {
     display: none;
     position: fixed; bottom: 80px; left: 16px; right: 16px;
@@ -508,7 +496,7 @@
     border: none; border-radius: var(--radius-sm);
     padding: 8px 14px; font-size: 12px; font-weight: 600;
     cursor: pointer; white-space: nowrap;
-    font-family: 'DM Sans', sans-serif;
+    font-family: inherit;
   }
   .install-dismiss {
     background: none; border: none;
@@ -519,7 +507,7 @@
 </head>
 <body>
 
-<!-- 打卡页 -->
+<!--打卡页 -->
 <div id="page-clock" class="tab-page active clock-page">
   <div class="clock-label">当前时间</div>
   <div class="current-time" id="currentTime"></div>
@@ -548,8 +536,7 @@
   <div class="page-header">
     <h2>睡眠记录</h2>
     <p>点击记录可以编辑或删除</p>
-  </div>
-  <div class="section-label">历史记录</div>
+  </div><div class="section-label">历史记录</div>
   <div id="historyList"></div>
   <div class="data-actions">
     <button class="data-btn export-btn" onclick="exportData()">↑ 导出备份</button>
@@ -569,12 +556,11 @@
     <canvas id="weeklyChart"></canvas>
   </div>
   <div class="chart-container">
-    <div class="chart-title">入睡 → 醒来 甘特图（绿色 ≥7h，橙色 &lt;7h）</div>
+    <div class="chart-title">入睡 →醒来 甘特图（绿色 ≥7h，橙色 &lt;7h）</div>
     <canvas id="ganttChart"></canvas>
   </div>
 </div>
 
-<!-- 底部导航 -->
 <!-- 离线提示条 -->
 <div class="offline-banner">📡 当前处于离线状态，数据仍可正常记录</div>
 
@@ -617,10 +603,10 @@
   </button>
 </div>
 
-<!-- 弹窗 -->
+<!--弹窗 -->
 <div class="modal-overlay" id="manualModal">
   <div class="modal">
-    <h3 id="modalTitle">手动记录睡眠</h3>
+    <h3id="modalTitle">手动记录睡眠</h3>
     <label>🌙 入睡时间</label>
     <input type="datetime-local" id="manualSleep">
     <label>☀️ 醒来时间</label>
@@ -723,7 +709,7 @@ function updatePunchUI() {
     btn.className = 'punch-btn wake-btn';
     btn.innerHTML = '<span class="btn-icon">☀️</span><span class="btn-label">醒来打卡</span>';
     const sd = getSleepDate(state.sleepTime);
-    statusEl.innerHTML = `已在 <span class="time-highlight">${fmtDate(sd)} ${toAmPm(state.sleepTime)}</span> 入睡<br>正在睡眠中… 💤`;
+    statusEl.innerHTML = `已在<span class="time-highlight">${fmtDate(sd)} ${toAmPm(state.sleepTime)}</span> 入睡<br>正在睡眠中…💤`;
   } else {
     btn.className = 'punch-btn sleep-btn';
     btn.innerHTML = '<span class="btn-icon">🌙</span><span class="btn-label">入睡打卡</span>';
@@ -743,15 +729,13 @@ function handlePunch() {
   const now = new Date().toISOString();
   if (!state.sleeping) {
     saveState({ sleeping: true, sleepTime: now });
-    showToast('🌙 晚安，好梦！');
-  } else {
+    showToast('🌙 晚安，好梦！');} else {
     const records = loadRecords();
     records.push({ id: Date.now(), sleep: state.sleepTime, wake: now });
     saveRecords(records);
     saveState({ sleeping: false });
     showToast('☀️ 早安！记录已保存');
-  }
-  updatePunchUI();
+  }updatePunchUI();
 }
 
 function adjustTime(minutes) {
@@ -831,8 +815,7 @@ function saveManualRecord() {
   saveRecords(records);
   closeManualModal();
   showToast(editingRecordId !== null ? '✓ 记录已更新' : '✓ 记录已保存');
-  editingRecordId = null;
-  renderHistory();
+  editingRecordId = null;renderHistory();
   updatePunchUI();
 }
 
@@ -920,6 +903,37 @@ function renderHistory() {
   }).join('');
 }
 
+// ==================== ✅ Chart.js 按需加载 ====================
+let chartJsLoaded = false;
+let chartJsLoading = false;
+
+function loadChartJS() {
+  return new Promise((resolve, reject) => {
+    // 已经加载过，直接返回
+    if (chartJsLoaded) { resolve(); return; }
+    // 正在加载中，等待完成
+    if (chartJsLoading) {
+      const check = setInterval(() => {
+        if (chartJsLoaded) { clearInterval(check); resolve(); }
+      }, 100);
+      return;
+    }
+    chartJsLoading = true;
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0';
+    script.onload = () => {
+      chartJsLoaded = true;
+      chartJsLoading = false;
+      resolve();
+    };
+    script.onerror = () => {
+      chartJsLoading = false;
+      reject(new Error('Chart.js 加载失败'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
 // ==================== 图表 ====================
 let weeklyChart = null;
 let ganttChart = null;
@@ -950,6 +964,7 @@ function renderCharts() {
     return;
   }
 
+  //✅ 先渲染不需要 Chart.js 的统计卡片
   const allDurations = records.map(r => calcDuration(r.sleep, r.wake));
   const avgDur = allDurations.reduce((a, b) => a + b, 0) / allDurations.length;
 
@@ -981,6 +996,18 @@ function renderCharts() {
       <div class="stat-label">平均醒来时间</div>
     </div>`;
 
+  // ✅ 异步加载 Chart.js 再画图
+  loadChartJS().then(() => {
+    renderChartsWithLib(records, chartFontColor, gridColor);
+  }).catch(() => {
+    document.querySelectorAll('.chart-container').forEach(el => {
+      el.innerHTML = '<div class="chart-loading">⚠️ 图表库加载失败，请检查网络后重试</div>';
+    });
+  });
+}
+
+//✅ 把原来画图的部分抽出来
+function renderChartsWithLib(records, chartFontColor, gridColor) {
   // 每周图
   const weekMap = new Map();
   records.forEach(r => {
@@ -1004,8 +1031,7 @@ function renderCharts() {
         backgroundColor: weekAvgs.map(d =>
           d >= 7 && d <= 9 ? 'rgba(59,124,94,0.75)' :
           d >= 6 ? 'rgba(181,131,10,0.75)' : 'rgba(192,57,43,0.75)'),
-        borderRadius: 6, borderSkipped: false,
-      }]
+        borderRadius: 6, borderSkipped: false,}]
     },
     options: {
       responsive: true,
@@ -1053,7 +1079,7 @@ function renderCharts() {
             title: items => ganttLabels[items[0].dataIndex],
             label: ctx => {
               const [s, w] = ctx.raw;
-              return `🌙 ${hourToAmPm(s)} →  ☀️ ${hourToAmPm(w)}  （${durationText(w - s)}）`;
+              return `🌙 ${hourToAmPm(s)} →☀️ ${hourToAmPm(w)}  （${durationText(w - s)}）`;
             }
           }
         }
@@ -1078,8 +1104,7 @@ function switchTab(name, el) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  el.classList.add('active');
-  if (name === 'history') renderHistory();
+  el.classList.add('active');if (name === 'history') renderHistory();
   if (name === 'chart') renderCharts();
 }
 
@@ -1119,7 +1144,6 @@ let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
-  // 如果用户没有永久关闭过提示，就显示
   if (!localStorage.getItem('pwa_install_dismissed')) {
     setTimeout(() => document.getElementById('installBanner').classList.add('show'), 2000);
   }
