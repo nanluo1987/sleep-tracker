@@ -10,13 +10,31 @@
 <title>🌙 睡眠打卡</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<!--✅ 删掉了 Google Fonts 的两行link -->
-<!--✅ 删掉了 Chart.js 的 script 标签 -->
+
+<!-- 本地字体：异步加载，不再依赖 Google Fonts -->
+<style>
+  @font-face {
+    font-family: 'Lora';
+    src: url('./fonts/Lora-Variable.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'DM Sans';
+    src: url('./fonts/DMSans-Variable.woff2') format('woff2');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg-base:#f5f4f0;
+    --bg-base:       #f5f4f0;
     --bg-surface:    #faf9f6;
     --bg-card:       #ffffff;
     --bg-sidebar:    #ede9e3;
@@ -33,7 +51,7 @@
     --text-secondary:#78716c;
     --text-tertiary: #a8a29e;
 
-    --border:#e5e0d8;
+    --border:        #e5e0d8;
     --border-strong: #d0c9be;
 
     --green:         #3b7c5e;
@@ -52,8 +70,7 @@
   }
 
   body {
-    /*✅ 改用系统字体栈，无需下载 */
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
     background: var(--bg-base);
     color: var(--text-primary);
     min-height: 100vh;
@@ -62,14 +79,13 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== TAB BAR ===== */
   .tab-bar {
     display: flex;
     position: fixed;
     bottom: env(safe-area-inset-bottom, 12px);
     left: 12px; right: 12px;
     background: var(--bg-surface);
-    border:1px solid var(--border);
+    border: 1px solid var(--border);
     border-radius: 20px;
     z-index: 100;
     box-shadow: 0 4px 20px rgba(28,25,23,0.10), 0 1px 4px rgba(28,25,23,0.06);
@@ -79,7 +95,7 @@
     flex: 1; padding: 11px 8px 10px;
     background: none; border: none;
     color: var(--text-tertiary);
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
     font-size: 11px; font-weight: 500;
     letter-spacing: 0.02em;
     display: flex; flex-direction: column;
@@ -95,10 +111,9 @@
   .tab-page { display: none; padding: 24px 16px; }
   .tab-page.active { display: block; }
 
-  /* ===== PAGE HEADER ===== */
-  .page-header {
-    margin-bottom: 24px;}
+  .page-header { margin-bottom: 24px; }
   .page-header h2 {
+    font-family: 'Lora', serif;
     font-size: 22px; font-weight: 600;
     color: var(--text-primary);
     letter-spacing: -0.01em;
@@ -108,7 +123,6 @@
     margin-top: 3px;
   }
 
-  /* ===== CLOCK PAGE ===== */
   .clock-page {
     padding-top: 36px;
     text-align: center;
@@ -120,6 +134,7 @@
     margin-bottom: 10px;
   }
   .current-time {
+    font-family: 'Lora', serif;
     font-size: 56px; font-weight: 500;
     color: var(--text-primary);
     letter-spacing: -1px;
@@ -127,7 +142,8 @@
     font-variant-numeric: tabular-nums;
   }
   .current-ampm {
-    font-size: 16px; font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
     color: var(--text-secondary);
     margin-left: 4px;
     vertical-align: super;
@@ -137,7 +153,6 @@
     margin-top: 8px; margin-bottom: 48px;
   }
 
-  /* ===== PUNCH BUTTON ===== */
   .punch-area {
     display: flex;
     flex-direction: column;
@@ -184,12 +199,11 @@
   }
   .punch-btn .btn-icon { font-size: 38px; line-height: 1; }
   .punch-btn .btn-label {
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
     font-size: 14px; font-weight: 600;
     letter-spacing: 0.01em;
   }
 
-  /* ===== STATUS TEXT ===== */
   .status-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -208,7 +222,6 @@
     font-size: 15px;
   }
 
-  /* ===== QUICK ADJUST ===== */
   .quick-adjust {
     margin-top: 16px;
     display: flex; gap: 8px;
@@ -219,7 +232,7 @@
     border: 1px solid var(--border);
     color: var(--text-secondary);
     padding: 7px 14px; border-radius: var(--radius-pill);
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
     font-size: 12px; font-weight: 500;
     cursor: pointer;
     transition: all 0.15s;
@@ -230,11 +243,8 @@
     color: var(--accent);
     background: var(--accent-soft);
   }
-  .adjust-btn:active {
-    transform: scale(0.97);
-  }
+  .adjust-btn:active { transform: scale(0.97); }
 
-  /* ===== CARDS & RECORDS ===== */
   .section-label {
     font-size: 11px; font-weight: 600;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -272,7 +282,9 @@
   .record-times span { display: flex; align-items: center; gap: 4px; }
   .record-right { display: flex; align-items: center; gap: 12px; }
   .record-duration {
-    font-size: 20px; font-weight: 600;}
+    font-family: 'Lora', serif;
+    font-size: 20px; font-weight: 600;
+  }
   .record-edit-icon {
     font-size: 14px; color: var(--text-tertiary); opacity: 0.6;
   }
@@ -288,7 +300,6 @@
   .empty-state .empty-icon { font-size: 40px; margin-bottom: 14px; opacity: 0.6; }
   .empty-state p { font-size: 14px; line-height: 1.6; }
 
-  /* ===== DATA ACTIONS ===== */
   .data-actions {
     display: flex; gap: 10px;
     margin-top: 24px; padding-top: 20px;
@@ -297,7 +308,7 @@
   .data-btn {
     flex: 1; padding: 12px;
     border-radius: var(--radius); border: 1px solid var(--border);
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
     font-size: 13px; font-weight: 600;
     cursor: pointer; display: flex;
     align-items: center; justify-content: center; gap: 6px;
@@ -306,7 +317,8 @@
   }
   .data-btn.export-btn {
     background: var(--bg-card);
-    color: var(--text-secondary);}
+    color: var(--text-secondary);
+  }
   .data-btn.export-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
@@ -323,7 +335,6 @@
   }
   .data-btn:active { transform: scale(0.98); }
 
-  /* ===== STATS ===== */
   .stats-grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px; margin-bottom: 24px;
@@ -337,6 +348,7 @@
     box-shadow: var(--shadow-sm);
   }
   .stat-value {
+    font-family: 'Lora', serif;
     font-size: 26px; font-weight: 600;
     color: var(--text-primary);
     line-height: 1;
@@ -347,7 +359,6 @@
     font-weight: 500; letter-spacing: 0.03em;
   }
 
-  /* ===== CHART CONTAINER ===== */
   .chart-container {
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -357,16 +368,10 @@
   }
   .chart-title {
     font-size: 12px; color: var(--text-tertiary);
-    margin-bottom: 14px; font-weight: 600;letter-spacing: 0.06em; text-transform: uppercase;
-  }
-  /*✅ 图表加载提示 */
-  .chart-loading {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-tertiary);font-size: 13px;
+    margin-bottom: 14px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
   }
 
-  /* ===== MODAL ===== */
   .modal-overlay {
     display: none; position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -392,6 +397,7 @@
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
   .modal h3 {
+    font-family: 'Lora', serif;
     font-size: 18px; font-weight: 600;
     margin-bottom: 22px; text-align: center;
     color: var(--text-primary);
@@ -407,10 +413,11 @@
     border: 1px solid var(--border);
     background: var(--bg-card);
     color: var(--text-primary);
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
     font-size: 15px; margin-bottom: 18px;
     outline: none;
-    transition: border-color 0.15s;box-shadow: var(--shadow-sm) inset;
+    transition: border-color 0.15s;
+    box-shadow: var(--shadow-sm) inset;
   }
   .modal input[type="datetime-local"]:focus {
     border-color: var(--accent);
@@ -420,13 +427,11 @@
   .modal-btns button {
     flex: 1; padding: 12px;
     border-radius: var(--radius-sm); border: 1px solid var(--border);
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
     font-size: 14px; font-weight: 600; cursor: pointer;
-    transition: all 0.15s;}
-  .btn-cancel {
-    background: var(--bg-base);
-    color: var(--text-secondary);
+    transition: all 0.15s;
   }
+  .btn-cancel { background: var(--bg-base); color: var(--text-secondary); }
   .btn-cancel:hover { border-color: var(--border-strong); }
   .btn-confirm {
     background: var(--accent);
@@ -440,10 +445,7 @@
   }
   .btn-danger:hover { background: #f9d5d3; }
 
-  .divider {
-    height: 1px; background: var(--border);
-    margin: 20px 0;
-  }
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
 
   .toast {
     position: fixed; top: 56px; left: 50%;
@@ -496,7 +498,7 @@
     border: none; border-radius: var(--radius-sm);
     padding: 8px 14px; font-size: 12px; font-weight: 600;
     cursor: pointer; white-space: nowrap;
-    font-family: inherit;
+    font-family: 'DM Sans', sans-serif;
   }
   .install-dismiss {
     background: none; border: none;
@@ -507,7 +509,6 @@
 </head>
 <body>
 
-<!--打卡页 -->
 <div id="page-clock" class="tab-page active clock-page">
   <div class="clock-label">当前时间</div>
   <div class="current-time" id="currentTime"></div>
@@ -531,12 +532,12 @@
   </div>
 </div>
 
-<!-- 记录页 -->
 <div id="page-history" class="tab-page">
   <div class="page-header">
     <h2>睡眠记录</h2>
     <p>点击记录可以编辑或删除</p>
-  </div><div class="section-label">历史记录</div>
+  </div>
+  <div class="section-label">历史记录</div>
   <div id="historyList"></div>
   <div class="data-actions">
     <button class="data-btn export-btn" onclick="exportData()">↑ 导出备份</button>
@@ -544,7 +545,6 @@
   </div>
 </div>
 
-<!-- 图表页 -->
 <div id="page-chart" class="tab-page">
   <div class="page-header">
     <h2>睡眠统计</h2>
@@ -556,15 +556,13 @@
     <canvas id="weeklyChart"></canvas>
   </div>
   <div class="chart-container">
-    <div class="chart-title">入睡 →醒来 甘特图（绿色 ≥7h，橙色 &lt;7h）</div>
+    <div class="chart-title">入睡 → 醒来 甘特图（绿色 ≥7h，橙色 &lt;7h）</div>
     <canvas id="ganttChart"></canvas>
   </div>
 </div>
 
-<!-- 离线提示条 -->
 <div class="offline-banner">📡 当前处于离线状态，数据仍可正常记录</div>
 
-<!-- 安装提示 -->
 <div class="install-banner" id="installBanner">
   <div class="install-banner-text">
     <strong>🌙 添加到主屏幕</strong>
@@ -583,7 +581,7 @@
     打卡
   </button>
   <button class="tab-btn" onclick="switchTab('history', this)">
-    <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+    <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <line x1="8" y1="7" x2="18" y2="7"/>
       <line x1="8" y1="12" x2="18" y2="12"/>
       <line x1="8" y1="17" x2="18" y2="17"/>
@@ -603,10 +601,9 @@
   </button>
 </div>
 
-<!--弹窗 -->
 <div class="modal-overlay" id="manualModal">
   <div class="modal">
-    <h3id="modalTitle">手动记录睡眠</h3>
+    <h3 id="modalTitle">手动记录睡眠</h3>
     <label>🌙 入睡时间</label>
     <input type="datetime-local" id="manualSleep">
     <label>☀️ 醒来时间</label>
@@ -709,7 +706,7 @@ function updatePunchUI() {
     btn.className = 'punch-btn wake-btn';
     btn.innerHTML = '<span class="btn-icon">☀️</span><span class="btn-label">醒来打卡</span>';
     const sd = getSleepDate(state.sleepTime);
-    statusEl.innerHTML = `已在<span class="time-highlight">${fmtDate(sd)} ${toAmPm(state.sleepTime)}</span> 入睡<br>正在睡眠中…💤`;
+    statusEl.innerHTML = `已在 <span class="time-highlight">${fmtDate(sd)} ${toAmPm(state.sleepTime)}</span> 入睡<br>正在睡眠中… 💤`;
   } else {
     btn.className = 'punch-btn sleep-btn';
     btn.innerHTML = '<span class="btn-icon">🌙</span><span class="btn-label">入睡打卡</span>';
@@ -729,13 +726,15 @@ function handlePunch() {
   const now = new Date().toISOString();
   if (!state.sleeping) {
     saveState({ sleeping: true, sleepTime: now });
-    showToast('🌙 晚安，好梦！');} else {
+    showToast('🌙 晚安，好梦！');
+  } else {
     const records = loadRecords();
     records.push({ id: Date.now(), sleep: state.sleepTime, wake: now });
     saveRecords(records);
     saveState({ sleeping: false });
     showToast('☀️ 早安！记录已保存');
-  }updatePunchUI();
+  }
+  updatePunchUI();
 }
 
 function adjustTime(minutes) {
@@ -815,7 +814,8 @@ function saveManualRecord() {
   saveRecords(records);
   closeManualModal();
   showToast(editingRecordId !== null ? '✓ 记录已更新' : '✓ 记录已保存');
-  editingRecordId = null;renderHistory();
+  editingRecordId = null;
+  renderHistory();
   updatePunchUI();
 }
 
@@ -903,40 +903,26 @@ function renderHistory() {
   }).join('');
 }
 
-// ==================== ✅ Chart.js 按需加载 ====================
-let chartJsLoaded = false;
-let chartJsLoading = false;
-
-function loadChartJS() {
-  return new Promise((resolve, reject) => {
-    // 已经加载过，直接返回
-    if (chartJsLoaded) { resolve(); return; }
-    // 正在加载中，等待完成
-    if (chartJsLoading) {
-      const check = setInterval(() => {
-        if (chartJsLoaded) { clearInterval(check); resolve(); }
-      }, 100);
-      return;
-    }
-    chartJsLoading = true;
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0';
-    script.onload = () => {
-      chartJsLoaded = true;
-      chartJsLoading = false;
-      resolve();
-    };
-    script.onerror = () => {
-      chartJsLoading = false;
-      reject(new Error('Chart.js 加载失败'));
-    };
-    document.head.appendChild(script);
-  });
-}
-
-// ==================== 图表 ====================
+// ==================== 图表（按需加载 Chart.js） ====================
 let weeklyChart = null;
 let ganttChart = null;
+let chartJsLoadingPromise = null;
+
+function loadChartJS() {
+  if (window.Chart) return Promise.resolve();
+  if (chartJsLoadingPromise) return chartJsLoadingPromise;
+
+  chartJsLoadingPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0';
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Chart.js 加载失败'));
+    document.head.appendChild(script);
+  });
+
+  return chartJsLoadingPromise;
+}
 
 function getWeekMonday(date) {
   const d = new Date(date);
@@ -954,149 +940,139 @@ function toGanttHour(dateStr) {
 }
 
 function renderCharts() {
-  const records = loadRecords();
-  const chartFontColor = '#78716c';
-  const gridColor = 'rgba(120,113,108,0.12)';
+  loadChartJS()
+    .then(() => {
+      const records = loadRecords();
+      const chartFontColor = '#78716c';
+      const gridColor = 'rgba(120,113,108,0.12)';
 
-  if (records.length === 0) {
-    document.getElementById('statsGrid').innerHTML =
-      '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📊</div><p>记录数据后<br>这里会显示统计图表</p></div>';
-    return;
-  }
-
-  //✅ 先渲染不需要 Chart.js 的统计卡片
-  const allDurations = records.map(r => calcDuration(r.sleep, r.wake));
-  const avgDur = allDurations.reduce((a, b) => a + b, 0) / allDurations.length;
-
-  const avgSleepHour = records.reduce((sum, r) => {
-    const d = new Date(r.sleep); let h = d.getHours() + d.getMinutes() / 60;
-    if (h < 18) h += 24; return sum + h;
-  }, 0) / records.length;
-
-  const avgWakeHour = records.reduce((sum, r) => {
-    const d = new Date(r.wake); let h = d.getHours() + d.getMinutes() / 60;
-    return sum + h;
-  }, 0) / records.length;
-
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-value ${durationClass(avgDur)}">${durationText(avgDur)}</div>
-      <div class="stat-label">平均睡眠时长</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">${records.length}</div>
-      <div class="stat-label">累计记录天数</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" style="font-size:20px">${hourToAmPm(avgSleepHour)}</div>
-      <div class="stat-label">平均入睡时间</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" style="font-size:20px">${hourToAmPm(avgWakeHour)}</div>
-      <div class="stat-label">平均醒来时间</div>
-    </div>`;
-
-  // ✅ 异步加载 Chart.js 再画图
-  loadChartJS().then(() => {
-    renderChartsWithLib(records, chartFontColor, gridColor);
-  }).catch(() => {
-    document.querySelectorAll('.chart-container').forEach(el => {
-      el.innerHTML = '<div class="chart-loading">⚠️ 图表库加载失败，请检查网络后重试</div>';
-    });
-  });
-}
-
-//✅ 把原来画图的部分抽出来
-function renderChartsWithLib(records, chartFontColor, gridColor) {
-  // 每周图
-  const weekMap = new Map();
-  records.forEach(r => {
-    const sd = getSleepDate(r.sleep);
-    const mon = getWeekMonday(sd);
-    const key = mon.getTime();
-    if (!weekMap.has(key)) weekMap.set(key, { mon, durations: [] });
-    weekMap.get(key).durations.push(calcDuration(r.sleep, r.wake));
-  });
-  const weeks = Array.from(weekMap.values()).sort((a, b) => a.mon - b.mon).slice(-12);
-  const weekLabels = weeks.map(w => fmtDateShort(w.mon));
-  const weekAvgs = weeks.map(w => Math.round(w.durations.reduce((a, b) => a + b, 0) / w.durations.length * 100) / 100);
-
-  if (weeklyChart) weeklyChart.destroy();
-  weeklyChart = new Chart(document.getElementById('weeklyChart'), {
-    type: 'bar',
-    data: {
-      labels: weekLabels,
-      datasets: [{
-        data: weekAvgs,
-        backgroundColor: weekAvgs.map(d =>
-          d >= 7 && d <= 9 ? 'rgba(59,124,94,0.75)' :
-          d >= 6 ? 'rgba(181,131,10,0.75)' : 'rgba(192,57,43,0.75)'),
-        borderRadius: 6, borderSkipped: false,}]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => `平均 ${durationText(ctx.raw)}` } }
-      },
-      scales: {
-        x: { ticks: { color: chartFontColor, font: { size: 10 } }, grid: { display: false } },
-        y: { min: 0, max: 12, ticks: { color: chartFontColor, stepSize: 2 }, grid: { color: gridColor } }
+      if (records.length === 0) {
+        document.getElementById('statsGrid').innerHTML =
+          '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📊</div><p>记录数据后<br>这里会显示统计图表</p></div>';
+        return;
       }
-    }
-  });
 
-  // 甘特图
-  const ganttRecords = records.slice(-21);
-  const ganttLabels = ganttRecords.map(r => fmtDateShort(getSleepDate(r.sleep)));
-  const ganttData = ganttRecords.map(r => {
-    const sh = toGanttHour(r.sleep);
-    let wh = toGanttHour(r.wake);
-    if (wh <= sh) wh += 24;
-    return [sh, wh];
-  });
-  const ganttColors = ganttRecords.map(r =>
-    calcDuration(r.sleep, r.wake) >= 7 ? 'rgba(59,124,94,0.8)' : 'rgba(212,135,74,0.85)');
+      const allDurations = records.map(r => calcDuration(r.sleep, r.wake));
+      const avgDur = allDurations.reduce((a, b) => a + b, 0) / allDurations.length;
 
-  const allSh = ganttData.map(d => d[0]);
-  const allWh = ganttData.map(d => d[1]);
-  const yMin = Math.floor(Math.min(...allSh)) - 0.5;
-  const yMax = Math.ceil(Math.max(...allWh)) + 0.5;
+      const avgSleepHour = records.reduce((sum, r) => {
+        const d = new Date(r.sleep); let h = d.getHours() + d.getMinutes() / 60;
+        if (h < 18) h += 24; return sum + h;
+      }, 0) / records.length;
 
-  if (ganttChart) ganttChart.destroy();
-  ganttChart = new Chart(document.getElementById('ganttChart'), {
-    type: 'bar',
-    data: {
-      labels: ganttLabels,
-      datasets: [{ data: ganttData, backgroundColor: ganttColors, borderRadius: 4, borderSkipped: false, barPercentage: 0.55 }]
-    },
-    options: {
-      responsive: true, indexAxis: 'x',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: items => ganttLabels[items[0].dataIndex],
-            label: ctx => {
-              const [s, w] = ctx.raw;
-              return `🌙 ${hourToAmPm(s)} →☀️ ${hourToAmPm(w)}  （${durationText(w - s)}）`;
+      const avgWakeHour = records.reduce((sum, r) => {
+        const d = new Date(r.wake); let h = d.getHours() + d.getMinutes() / 60;
+        return sum + h;
+      }, 0) / records.length;
+
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value ${durationClass(avgDur)}">${durationText(avgDur)}</div>
+          <div class="stat-label">平均睡眠时长</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${records.length}</div>
+          <div class="stat-label">累计记录天数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="font-size:20px">${hourToAmPm(avgSleepHour)}</div>
+          <div class="stat-label">平均入睡时间</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="font-size:20px">${hourToAmPm(avgWakeHour)}</div>
+          <div class="stat-label">平均醒来时间</div>
+        </div>`;
+
+      const weekMap = new Map();
+      records.forEach(r => {
+        const sd = getSleepDate(r.sleep);
+        const mon = getWeekMonday(sd);
+        const key = mon.getTime();
+        if (!weekMap.has(key)) weekMap.set(key, { mon, durations: [] });
+        weekMap.get(key).durations.push(calcDuration(r.sleep, r.wake));
+      });
+      const weeks = Array.from(weekMap.values()).sort((a, b) => a.mon - b.mon).slice(-12);
+      const weekLabels = weeks.map(w => fmtDateShort(w.mon));
+      const weekAvgs = weeks.map(w => Math.round(w.durations.reduce((a, b) => a + b, 0) / w.durations.length * 100) / 100);
+
+      if (weeklyChart) weeklyChart.destroy();
+      weeklyChart = new Chart(document.getElementById('weeklyChart'), {
+        type: 'bar',
+        data: {
+          labels: weekLabels,
+          datasets: [{
+            data: weekAvgs,
+            backgroundColor: weekAvgs.map(d =>
+              d >= 7 && d <= 9 ? 'rgba(59,124,94,0.75)' :
+              d >= 6 ? 'rgba(181,131,10,0.75)' : 'rgba(192,57,43,0.75)'),
+            borderRadius: 6, borderSkipped: false,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => `平均 ${durationText(ctx.raw)}` } }
+          },
+          scales: {
+            x: { ticks: { color: chartFontColor, font: { size: 10 } }, grid: { display: false } },
+            y: { min: 0, max: 12, ticks: { color: chartFontColor, stepSize: 2 }, grid: { color: gridColor } }
+          }
+        }
+      });
+
+      const ganttRecords = records.slice(-21);
+      const ganttLabels = ganttRecords.map(r => fmtDateShort(getSleepDate(r.sleep)));
+      const ganttData = ganttRecords.map(r => {
+        const sh = toGanttHour(r.sleep);
+        let wh = toGanttHour(r.wake);
+        if (wh <= sh) wh += 24;
+        return [sh, wh];
+      });
+      const ganttColors = ganttRecords.map(r =>
+        calcDuration(r.sleep, r.wake) >= 7 ? 'rgba(59,124,94,0.8)' : 'rgba(212,135,74,0.85)');
+
+      const allSh = ganttData.map(d => d[0]);
+      const allWh = ganttData.map(d => d[1]);
+      const yMin = Math.floor(Math.min(...allSh)) - 0.5;
+      const yMax = Math.ceil(Math.max(...allWh)) + 0.5;
+
+      if (ganttChart) ganttChart.destroy();
+      ganttChart = new Chart(document.getElementById('ganttChart'), {
+        type: 'bar',
+        data: {
+          labels: ganttLabels,
+          datasets: [{ data: ganttData, backgroundColor: ganttColors, borderRadius: 4, borderSkipped: false, barPercentage: 0.55 }]
+        },
+        options: {
+          responsive: true, indexAxis: 'x',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: items => ganttLabels[items[0].dataIndex],
+                label: ctx => {
+                  const [s, w] = ctx.raw;
+                  return `🌙 ${hourToAmPm(s)} →  ☀️ ${hourToAmPm(w)}  （${durationText(w - s)}）`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { ticks: { color: chartFontColor, font: { size: 10 }, maxRotation: 50, minRotation: 30 }, grid: { display: false } },
+            y: {
+              reverse: true, min: yMin, max: yMax,
+              ticks: {
+                color: chartFontColor, stepSize: 1,
+                callback: v => { let h = ((v % 24) + 24) % 24; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h} ${ap}`; }
+              },
+              grid: { color: gridColor }
             }
           }
         }
-      },
-      scales: {
-        x: { ticks: { color: chartFontColor, font: { size: 10 }, maxRotation: 50, minRotation: 30 }, grid: { display: false } },
-        y: {
-          reverse: true, min: yMin, max: yMax,
-          ticks: {
-            color: chartFontColor, stepSize: 1,
-            callback: v => { let h = ((v % 24) + 24) % 24; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h} ${ap}`; }
-          },
-          grid: { color: gridColor }
-        }
-      }
-    }
-  });
+      });
+    })
+    .catch(() => showToast('统计图表加载失败'));
 }
 
 // ==================== 页面切换 ====================
@@ -1104,7 +1080,8 @@ function switchTab(name, el) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  el.classList.add('active');if (name === 'history') renderHistory();
+  el.classList.add('active');
+  if (name === 'history') renderHistory();
   if (name === 'chart') renderCharts();
 }
 
