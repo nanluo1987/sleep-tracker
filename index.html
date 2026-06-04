@@ -123,13 +123,81 @@
 
   .tab-page.active { display: block; }
 
+  /* Full-height layout for history & chart pages */
+  #page-history.active,
+  #page-chart.active {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 90px);
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  #page-history > .page-header,
+  #page-chart > .page-header {
+    flex-shrink: 0;
+  }
+
+  /* History: gantt fills remaining space */
+  #page-history #historyList {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #page-history #historyList > .chart-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  #page-history .gantt-wrap {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+  }
+
+  /* Chart page: three containers share space */
+  #page-chart #calendarContainer {
+    flex: 0 0 auto;
+    display: block;
+    min-height: auto;
+    padding: 8px 14px;
+  }
+
+  #page-chart .chart-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6px;
+  }
+
+  #page-chart .chart-container:last-child {
+    margin-bottom: 0;
+  }
+
+  #page-chart .chart-area {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+  }
+
   /* ===== PAGE HEADER ===== */
   .page-header {
-    margin-bottom: 22px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+  }
+
+  #page-chart .page-header,
+  #page-history .page-header {
+    margin-bottom: 10px;
   }
 
   .page-header h2 {
@@ -463,22 +531,6 @@
     background: #7c5c1e;
   }
 
-  body.is-sleeping .stat-card {
-    background: rgba(248, 231, 181, 0.06);
-    border-color: rgba(248, 231, 181, 0.14);
-    color: #f8e7b5;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-  }
-
-  body.is-sleeping .stat-card.active {
-    background: rgba(248, 231, 181, 0.12);
-    border-color: rgba(248, 231, 181, 0.32);
-  }
-
-  body.is-sleeping .stat-label {
-    color: rgba(248, 231, 181, 0.58);
-  }
-
   body.is-sleeping .chart-container {
     background: rgba(20, 23, 32, 0.84);
     border-color: rgba(248, 231, 181, 0.12);
@@ -489,77 +541,8 @@
     color: rgba(248, 231, 181, 0.62);
   }
 
-  body.is-sleeping .fixed-y-axis {
-    color: rgba(248, 231, 181, 0.58);
-  }
 
   /* ===== RECORDS ===== */
-  .record-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .record-card:hover {
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-  }
-
-  .record-card:active { transform: scale(0.99); }
-
-  .record-left {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .record-date {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-
-  .record-times {
-    display: flex;
-    gap: 14px;
-    font-size: 13px;
-    color: var(--text-secondary);
-  }
-
-  .record-times span {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .record-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .record-duration {
-    font-family: 'Lora', serif;
-    font-size: 20px;
-    font-weight: 600;
-  }
-
-  .record-edit-icon {
-    font-size: 14px;
-    color: var(--text-tertiary);
-    opacity: 0.6;
-  }
-
   .duration-good { color: var(--green); }
   .duration-warn { color: var(--yellow); }
   .duration-bad  { color: var(--red); }
@@ -581,80 +564,263 @@
     line-height: 1.6;
   }
 
-  /* ===== STATS ===== */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 18px;
+  /* ===== STATS TOGGLE SWITCH ===== */
+  .mode-switch-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .stat-card {
-    appearance: none;
-    width: 100%;
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 15px 12px;
-    text-align: center;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
+  .mode-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: var(--border-strong);
+    border-radius: 12px;
+    border: none;
     cursor: pointer;
+    transition: background 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .mode-switch.on {
+    background: var(--accent);
+  }
+
+  .mode-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  }
+
+  .mode-switch.on::after {
+    transform: translateX(20px);
+  }
+
+  .mode-switch-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  body.is-sleeping .mode-switch {
+    background: rgba(248, 231, 181, 0.2);
+  }
+
+  body.is-sleeping .mode-switch.on {
+    background: rgba(248, 231, 181, 0.6);
+  }
+
+  body.is-sleeping .mode-switch-label {
+    color: rgba(248, 231, 181, 0.7);
+  }
+
+  /* ===== CALENDAR ===== */
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    user-select: none;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cal-header-title {
+    font-family: 'Lora', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .cal-nav-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
     transition: all 0.15s;
   }
 
-  .stat-card:hover {
+  .cal-nav-btn:hover {
     border-color: var(--accent);
-    background: var(--accent-soft);
-    transform: translateY(-1px);
+    color: var(--accent);
   }
 
-  .stat-card:active {
-    transform: scale(0.98);
+  .cal-nav-btn:active { transform: scale(0.94); }
+
+  .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 2px;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .stat-card.active {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    box-shadow: 0 6px 18px rgba(201,100,66,0.12);
-  }
-
-  .stat-value {
-    font-family: 'Lora', serif;
-    font-size: 24px;
+  .cal-weekday {
+    text-align: center;
+    font-size: 9px;
     font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1;
+    color: var(--text-tertiary);
+    padding: 1px 0;
+    letter-spacing: 0.04em;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .cal-cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    transition: transform 0.1s;
+  }
+
+  .cal-cell.empty { background: transparent; }
+  .cal-cell.no-record { background: var(--bg-sidebar); }
+  .cal-cell.good { background: var(--green); opacity: 0.78; }
+  .cal-cell.bad { background: var(--gold); opacity: 0.82; }
+
+  body.is-sleeping .cal-cell.no-record { background: rgba(248,231,181,0.08); }
+  body.is-sleeping .cal-cell.good { background: rgba(59,124,94,0.7); }
+  body.is-sleeping .cal-cell.bad { background: rgba(212,135,74,0.7); }
+  body.is-sleeping .cal-header-title { color: #f8e7b5; }
+  body.is-sleeping .cal-nav-btn { border-color: rgba(248,231,181,0.18); color: rgba(248,231,181,0.6); }
+  body.is-sleeping .cal-nav-btn:hover { border-color: rgba(248,231,181,0.4); color: #f8e7b5; }
+
+  /* ===== SETTINGS MODAL ===== */
+  .goal-input-group {
+    margin-bottom: 16px;
+  }
+
+  .goal-input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
     margin-bottom: 6px;
   }
 
-  .stat-label {
-    font-size: 11px;
+  .goal-input-group input,
+  .goal-input-group select {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s;
+    box-shadow: var(--shadow-sm) inset;
+  }
+
+  .goal-input-group input:focus,
+  .goal-input-group select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* ===== GANTT (Records page) ===== */
+  .gantt-wrap {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gantt-container {
+    position: relative;
+    min-width: 100%;
+  }
+
+  .gantt-bar {
+    position: absolute;
+    height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.12s, transform 0.1s;
+    min-width: 6px;
+  }
+
+  .gantt-bar:hover {
+    opacity: 0.85;
+    transform: scaleY(1.15);
+  }
+
+  .gantt-bar:active { transform: scaleY(1.05); }
+
+  .gantt-date-label {
+    position: absolute;
+    font-size: 10px;
     color: var(--text-tertiary);
-    font-weight: 500;
-    letter-spacing: 0.03em;
+    white-space: nowrap;
+    line-height: 26px;
+    text-align: right;
   }
 
-  .chart-section {
-    display: none;
+  .gantt-time-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 2;
   }
 
-  .chart-section.active {
-    display: block;
+  body.is-sleeping .gantt-time-axis {
+    color: rgba(248,231,181,0.5);
+    border-color: rgba(248,231,181,0.1);
+    background: rgba(20,23,32,0.84);
+  }
+
+  body.is-sleeping .gantt-date-label {
+    color: rgba(248,231,181,0.5);
   }
 
   .chart-container {
     background: var(--bg-card);
     border-radius: var(--radius);
-    padding: 18px;
-    margin-bottom: 16px;
+    padding: 12px 14px;
+    margin-bottom: 6px;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
   }
 
   .chart-title {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-tertiary);
-    margin-bottom: 14px;
+    margin-bottom: 6px;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -663,60 +829,14 @@
   .chart-area {
     position: relative;
     width: 100%;
-    height: 260px;
-  }
-
-  .chart-row {
-    display: flex;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .fixed-y-axis {
-    width: 58px;
-    flex: 0 0 58px;
-    height: 260px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 8px 4px 18px 0;
-    text-align: right;
-    font-size: 11px;
-    color: var(--text-tertiary);
-    user-select: none;
-    pointer-events: none;
-  }
-
-  .fixed-y-axis .axis-item {
-    line-height: 1;
-  }
-
-  .chart-scroll {
+    min-height: 80px;
     flex: 1;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
-  }
-
-  .chart-viewport {
-    position: relative;
-    height: 260px;
-  }
-
-  .chart-viewport canvas {
-    display: block;
   }
 
   .chart-area canvas {
     display: block;
     width: 100% !important;
     height: 100% !important;
-  }
-
-  .chart-empty {
-    margin-bottom: 16px;
   }
 
   /* ===== MODAL ===== */
@@ -933,6 +1053,7 @@
     line-height: 1;
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 
 <body>
@@ -974,6 +1095,12 @@
   <div class="page-header">
     <h2>睡眠记录</h2>
     <div class="header-actions">
+      <button class="icon-action-btn" onclick="manualSync()" aria-label="云端同步" title="云端同步">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+        </svg>
+      </button>
+
       <button class="icon-action-btn" onclick="openManualModal()" aria-label="手动记录" title="手动记录">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 20h9"/>
@@ -1000,70 +1127,78 @@
       </button>
     </div>
   </div>
-  <div id="historyList"></div>
+  <div id="historyList">
+    <div class="chart-container">
+      <div class="gantt-wrap" id="historyGanttWrap"></div>
+    </div>
+  </div>
 </div>
 
 <!-- 图表页 -->
 <div id="page-chart" class="tab-page">
   <div class="page-header">
     <h2>睡眠统计</h2>
-  </div>
-
-  <div class="stats-grid" id="statsGrid"></div>
-
-  <div class="chart-section active" id="durationSection">
-    <div id="durationCharts">
-      <div class="chart-container">
-        <div class="chart-title">每周平均睡眠时长（小时）</div>
-        <div class="chart-area">
-          <canvas id="weeklyChart"></canvas>
-        </div>
+    <div class="header-actions">
+      <div class="mode-switch-wrap">
+        <span class="mode-switch-label" id="modeSwitchLabel">睡眠时长</span>
+        <button class="mode-switch" id="modeSwitch" onclick="toggleChartMode()" aria-label="切换模式"></button>
       </div>
-
-      <div class="chart-container">
-        <div class="chart-title">每日睡眠时间甘特图（绿色 ≥7.5h，橙色 &lt;7.5h）</div>
-        <div class="chart-row">
-          <div class="fixed-y-axis" id="ganttAxis"></div>
-          <div class="chart-scroll">
-            <div class="chart-viewport" id="ganttViewport">
-              <canvas id="ganttChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="empty-state chart-empty" id="durationEmpty" style="display:none">
-      <div class="empty-icon">📊</div>
-      <p>记录数据后<br>这里会显示统计图表</p>
+      <button class="icon-action-btn" onclick="openGoalModal()" aria-label="目标设置" title="目标设置">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
     </div>
   </div>
 
-  <div class="chart-section" id="sleepTimeSection">
-    <div id="sleepTimeCharts">
-      <div class="chart-container">
-        <div class="chart-title">每周平均入睡时间</div>
-        <div class="chart-area">
-          <canvas id="weeklySleepChart"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-container">
-        <div class="chart-title">每日入睡时间（最近14天，可右滑查看更早数据）</div>
-        <div class="chart-row">
-          <div class="fixed-y-axis" id="dailySleepAxis"></div>
-          <div class="chart-scroll">
-            <div class="chart-viewport" id="dailySleepViewport">
-              <canvas id="dailySleepChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Calendar -->
+  <div class="chart-container" id="calendarContainer">
+    <div class="cal-header">
+      <button class="cal-nav-btn" onclick="calNav(-1)" aria-label="上个月">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="cal-header-title" id="calTitle"></span>
+      <button class="cal-nav-btn" onclick="calNav(1)" aria-label="下个月">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
     </div>
+    <div class="cal-weekdays" id="calWeekdays"></div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
 
-    <div class="empty-state chart-empty" id="sleepTimeEmpty" style="display:none">
-      <div class="empty-icon">🌙</div>
-      <p>记录数据后<br>这里会显示平均入睡时间图表</p>
+  <!-- Distribution -->
+  <div class="chart-container">
+    <div class="chart-title" id="distTitle">睡眠时长分布</div>
+    <div class="chart-area">
+      <canvas id="distChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Average -->
+  <div class="chart-container">
+    <div class="chart-title" id="avgTitle">每周平均睡眠时长</div>
+    <div class="chart-area">
+      <canvas id="avgChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 目标设置弹窗 -->
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <h3>目标设置</h3>
+    <div class="goal-input-group">
+      <label>🛏️ 最低睡眠时长（小时）</label>
+      <input type="number" id="goalDuration" min="4" max="12" step="0.5" value="7.5">
+    </div>
+    <div class="goal-input-group">
+      <label>🌙 最晚入睡时间</label>
+      <input type="time" id="goalBedtime" value="23:00">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeGoalModal()">取消</button>
+      <button class="btn-confirm" onclick="saveGoalSettings()">保存</button>
     </div>
   </div>
 </div>
@@ -1149,12 +1284,107 @@ function saveState(state) {
   localStorage.setItem(STATE_KEY, JSON.stringify(state));
 }
 
-function loadChartMode() {
-  return localStorage.getItem(CHART_MODE_KEY) || 'duration';
+// ==================== Supabase 云端同步 ====================
+const SUPABASE_URL = 'https://hngvytkpgqpczgngafxr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuZ3Z5dGtwZ3FwY3pnbmdhZnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1NjA4NTUsImV4cCI6MjA5NDEzNjg1NX0.86Z-MvwUFMm0sfgcAoo52sY4k_ZeHN-Ms65GgZ-E3M0';
+const SUPA_TABLE = 'sleep_records';
+let sb = null;
+
+try {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch (e) {
+  console.warn('Supabase 初始化失败:', e);
 }
 
-function saveChartMode(mode) {
-  localStorage.setItem(CHART_MODE_KEY, mode);
+let syncInProgress = false;
+
+async function cloudSync() {
+  if (!sb || syncInProgress) return;
+  syncInProgress = true;
+
+  try {
+    // 1. Fetch all cloud records
+    const { data: cloudRows, error } = await sb
+      .from(SUPA_TABLE)
+      .select('*');
+
+    if (error) throw error;
+
+    const localRecords = loadRecords();
+
+    // 2. Merge: build map by id, local wins on conflict (most recent edit)
+    const merged = new Map();
+
+    // Cloud first
+    (cloudRows || []).forEach(r => {
+      merged.set(r.id, { id: r.id, sleep: r.sleep, wake: r.wake });
+    });
+
+    // Local overwrites
+    localRecords.forEach(r => {
+      merged.set(r.id, { id: r.id, sleep: r.sleep, wake: r.wake });
+    });
+
+    const mergedArr = Array.from(merged.values())
+      .sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
+
+    // 3. Save merged to local
+    saveRecords(mergedArr);
+
+    // 4. Upsert all to cloud
+    const { error: upsertErr } = await sb
+      .from(SUPA_TABLE)
+      .upsert(mergedArr, { onConflict: 'id' });
+
+    if (upsertErr) throw upsertErr;
+
+    // 5. Delete cloud records not in merged set (handles local deletions)
+    const mergedIds = new Set(mergedArr.map(r => r.id));
+    const toDelete = (cloudRows || [])
+      .filter(r => !mergedIds.has(r.id))
+      .map(r => r.id);
+
+    if (toDelete.length > 0) {
+      await sb.from(SUPA_TABLE).delete().in('id', toDelete);
+    }
+
+    console.log('☁️ 同步完成');
+  } catch (e) {
+    console.error('☁️ 同步失败:', e);
+  } finally {
+    syncInProgress = false;
+  }
+}
+
+// Push a single record to cloud (fast path for punch/edit)
+async function cloudPush(record) {
+  if (!sb) return;
+  try {
+    await sb.from(SUPA_TABLE).upsert([{
+      id: record.id, sleep: record.sleep, wake: record.wake
+    }], { onConflict: 'id' });
+  } catch (e) {
+    console.error('☁️ 推送失败:', e);
+  }
+}
+
+// Delete a single record from cloud
+async function cloudDelete(id) {
+  if (!sb) return;
+  try {
+    await sb.from(SUPA_TABLE).delete().eq('id', id);
+  } catch (e) {
+    console.error('☁️ 删除失败:', e);
+  }
+}
+
+async function manualSync() {
+  showToast('☁️ 正在同步…');
+  await cloudSync();
+  renderHistory();
+  updatePunchUI();
+  refreshChartsIfVisible();
+  showToast('☁️ 同步完成');
 }
 
 // ==================== 时间工具 ====================
@@ -1239,97 +1469,10 @@ function sleepTimeColorFromDate(dateStr) {
   return sleepTimeColorFromAxisHour(getSleepAxisHour(dateStr));
 }
 
-function clearChart(chart) {
-  if (chart) chart.destroy();
-  return null;
-}
-
 function refreshChartsIfVisible() {
   if (document.getElementById('page-chart').classList.contains('active')) {
     renderCharts();
   }
-}
-
-function showSectionCharts(sectionKey) {
-  const charts = document.getElementById(sectionKey + 'Charts');
-  const empty = document.getElementById(sectionKey + 'Empty');
-  if (charts) charts.style.display = 'block';
-  if (empty) empty.style.display = 'none';
-}
-
-function showSectionEmpty(sectionKey, html) {
-  const charts = document.getElementById(sectionKey + 'Charts');
-  const empty = document.getElementById(sectionKey + 'Empty');
-  if (charts) charts.style.display = 'none';
-  if (empty) {
-    if (html) empty.innerHTML = html;
-    empty.style.display = 'block';
-  }
-}
-
-function destroyAllCharts() {
-  weeklyChart = clearChart(weeklyChart);
-  ganttChart = clearChart(ganttChart);
-  weeklySleepChart = clearChart(weeklySleepChart);
-  dailySleepChart = clearChart(dailySleepChart);
-}
-
-function applyChartMode() {
-  const mode = loadChartMode();
-  const durationSection = document.getElementById('durationSection');
-  const sleepTimeSection = document.getElementById('sleepTimeSection');
-
-  if (durationSection) durationSection.classList.toggle('active', mode === 'duration');
-  if (sleepTimeSection) sleepTimeSection.classList.toggle('active', mode === 'sleepTime');
-
-  document.querySelectorAll('.stat-card[data-mode]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
-  });
-}
-
-function setChartMode(mode) {
-  if (mode !== 'duration' && mode !== 'sleepTime') return;
-  saveChartMode(mode);
-  applyChartMode();
-  if (document.getElementById('page-chart').classList.contains('active')) {
-    renderCharts();
-  }
-}
-
-function getScrollableCanvasWidth(scrollEl, count, slotWidth = 30, minHeight = 260) {
-  const baseWidth = scrollEl ? Math.floor(scrollEl.clientWidth || scrollEl.getBoundingClientRect().width || 0) : 0;
-  return Math.max(baseWidth, Math.max(count, 1) * slotWidth, 280, minHeight);
-}
-
-function setupScrollableCanvas(viewportId, canvasId, count, slotWidth = 30, height = 260) {
-  const viewport = document.getElementById(viewportId);
-  const canvas = document.getElementById(canvasId);
-  if (!viewport || !canvas) return null;
-
-  const scrollEl = viewport.parentElement;
-  const width = getScrollableCanvasWidth(scrollEl, count, slotWidth, height);
-
-  viewport.style.width = width + 'px';
-  canvas.width = width;
-  canvas.height = height;
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-
-  return canvas;
-}
-
-function renderFixedYAxis(containerId, labels) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = labels.map(t => `<div class="axis-item">${t}</div>`).join('');
-}
-
-function scrollChartToEnd(scrollContainerId) {
-  const el = document.getElementById(scrollContainerId);
-  if (!el) return;
-  requestAnimationFrame(() => {
-    el.scrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
-  });
 }
 
 // ==================== 时钟 ====================
@@ -1408,8 +1551,10 @@ function handlePunch() {
     showToast('🌙 晚安，好梦！');
   } else {
     const records = loadRecords();
-    records.push({ id: Date.now(), sleep: state.sleepTime, wake: now });
+    const newRec = { id: Date.now(), sleep: state.sleepTime, wake: now };
+    records.push(newRec);
     saveRecords(records);
+    cloudPush(newRec);
     saveState({ sleeping: false });
     showToast('☀️ 早安！记录已保存');
   }
@@ -1512,6 +1657,12 @@ function saveManualRecord() {
   records.sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
   saveRecords(records);
 
+  // Sync the saved record to cloud
+  const savedRec = isEdit
+    ? records.find(r => r.id === editingRecordId)
+    : records[records.length - 1];
+  if (savedRec) cloudPush(savedRec);
+
   closeManualModal();
   showToast(isEdit ? '✓ 记录已更新' : '✓ 记录已保存');
 
@@ -1526,6 +1677,7 @@ function deleteRecord(id) {
 
   const records = loadRecords().filter(r => r.id !== id);
   saveRecords(records);
+  cloudDelete(id);
 
   closeManualModal();
   renderHistory();
@@ -1585,6 +1737,7 @@ function importData() {
 
           existing.sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
           saveRecords(existing);
+          cloudSync();
 
           showToast(`导入成功，新增 ${added} 条记录`);
           renderHistory();
@@ -1604,10 +1757,464 @@ function importData() {
   input.click();
 }
 
-// ==================== 记录列表 ====================
+// ==================== 目标设置 ====================
+const GOAL_KEY = 'sleep_tracker_goals';
+
+function loadGoals() {
+  try {
+    const g = JSON.parse(localStorage.getItem(GOAL_KEY));
+    return { duration: g?.duration ?? 7.5, bedtime: g?.bedtime ?? '23:00' };
+  } catch { return { duration: 7.5, bedtime: '23:00' }; }
+}
+
+function saveGoals(goals) {
+  localStorage.setItem(GOAL_KEY, JSON.stringify(goals));
+}
+
+function goalBedtimeAxisHour() {
+  const g = loadGoals();
+  const [h, m] = g.bedtime.split(':').map(Number);
+  let ax = h + m / 60;
+  if (ax < 18) ax += 24;
+  return ax;
+}
+
+function openGoalModal() {
+  const g = loadGoals();
+  document.getElementById('goalDuration').value = g.duration;
+  document.getElementById('goalBedtime').value = g.bedtime;
+  document.getElementById('goalModal').classList.add('show');
+}
+
+function closeGoalModal() {
+  document.getElementById('goalModal').classList.remove('show');
+}
+
+function saveGoalSettings() {
+  const dur = parseFloat(document.getElementById('goalDuration').value) || 7.5;
+  const bed = document.getElementById('goalBedtime').value || '23:00';
+  saveGoals({ duration: Math.max(1, Math.min(dur, 16)), bedtime: bed });
+  closeGoalModal();
+  showToast('✓ 目标已更新');
+  if (document.getElementById('page-chart').classList.contains('active')) {
+    renderCharts();
+  }
+}
+
+// ==================== 模式切换（switch） ====================
+function loadChartMode() {
+  return localStorage.getItem(CHART_MODE_KEY) || 'duration';
+}
+
+function saveChartMode(mode) {
+  localStorage.setItem(CHART_MODE_KEY, mode);
+}
+
+function applyModeSwitchUI() {
+  const mode = loadChartMode();
+  const sw = document.getElementById('modeSwitch');
+  const label = document.getElementById('modeSwitchLabel');
+  if (!sw || !label) return;
+  if (mode === 'sleepTime') {
+    sw.classList.add('on');
+    label.textContent = '入睡时间';
+  } else {
+    sw.classList.remove('on');
+    label.textContent = '睡眠时长';
+  }
+}
+
+function toggleChartMode() {
+  const mode = loadChartMode() === 'duration' ? 'sleepTime' : 'duration';
+  saveChartMode(mode);
+  applyModeSwitchUI();
+  renderCharts();
+}
+
+// ==================== Calendar ====================
+let calYear, calMonth; // 0-indexed month
+
+function initCalendar() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+
+  // Weekday headers
+  const wdEl = document.getElementById('calWeekdays');
+  if (wdEl) {
+    wdEl.innerHTML = ['一','二','三','四','五','六','日']
+      .map(d => `<div class="cal-weekday">${d}</div>`).join('');
+  }
+
+  // Swipe support
+  const container = document.getElementById('calendarContainer');
+  if (container) {
+    let sx = 0, sy = 0;
+    container.addEventListener('touchstart', e => {
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+    }, { passive: true });
+    container.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        calNav(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+  }
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const mode = loadChartMode();
+  const records = loadRecords();
+  const goals = loadGoals();
+
+  // Title
+  const months = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+  const titleEl = document.getElementById('calTitle');
+  if (titleEl) titleEl.textContent = `${months[calMonth]} ${calYear}`;
+
+  // Build a map: dateKey -> record data
+  const dateMap = new Map();
+  records.forEach(r => {
+    const sd = getSleepDate(r.sleep);
+    const key = `${sd.getFullYear()}-${sd.getMonth()}-${sd.getDate()}`;
+    const dur = calcDuration(r.sleep, r.wake);
+    const axHour = getSleepAxisHour(r.sleep);
+    dateMap.set(key, { dur, axHour });
+  });
+
+  // Calendar grid
+  const firstDay = new Date(calYear, calMonth, 1);
+  let startDow = firstDay.getDay(); // 0=Sun
+  startDow = startDow === 0 ? 6 : startDow - 1; // Convert to Mon=0
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+  const grid = document.getElementById('calGrid');
+  if (!grid) return;
+
+  let html = '';
+  // Empty cells before first day
+  for (let i = 0; i < startDow; i++) {
+    html += '<div class="cal-cell empty"></div>';
+  }
+
+  const goalBedAx = goalBedtimeAxisHour();
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${calYear}-${calMonth}-${d}`;
+    const data = dateMap.get(key);
+
+    let cls = 'no-record';
+    if (data) {
+      if (mode === 'duration') {
+        cls = data.dur >= goals.duration ? 'good' : 'bad';
+      } else {
+        cls = data.axHour <= goalBedAx ? 'good' : 'bad';
+      }
+    }
+    html += `<div class="cal-cell ${cls}" title="${calYear}/${calMonth+1}/${d}"></div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+// ==================== Distribution Chart ====================
+let distChart = null;
+
+function renderDistribution(records) {
+  if (distChart) { distChart.destroy(); distChart = null; }
+
+  const mode = loadChartMode();
+  const canvas = document.getElementById('distChart');
+  if (!canvas || records.length === 0) return;
+
+  const titleEl = document.getElementById('distTitle');
+  if (titleEl) titleEl.textContent = mode === 'duration' ? '睡眠时长分布' : '入睡时间分布';
+
+  const isDark = document.body.classList.contains('is-sleeping');
+  const fontColor = isDark ? 'rgba(248,231,181,0.72)' : '#78716c';
+  const gridColor = isDark ? 'rgba(248,231,181,0.10)' : 'rgba(120,113,108,0.12)';
+
+  let allValues, last7Values, binMin, binMax, binStep, labelFn;
+
+  if (mode === 'duration') {
+    allValues = records.map(r => calcDuration(r.sleep, r.wake));
+    last7Values = allValues.slice(-7);
+    binMin = Math.floor(Math.min(...allValues));
+    binMax = Math.ceil(Math.max(...allValues));
+    binStep = 0.5;
+    labelFn = v => `${v}h`;
+  } else {
+    allValues = records.map(r => getSleepAxisHour(r.sleep));
+    last7Values = allValues.slice(-7);
+    binMin = Math.floor(Math.min(...allValues));
+    binMax = Math.ceil(Math.max(...allValues));
+    binStep = 0.5;
+    labelFn = v => hourLabel(v);
+  }
+
+  // Build bins
+  const bins = [];
+  for (let b = binMin; b < binMax; b += binStep) {
+    bins.push(b);
+  }
+  if (bins.length === 0) bins.push(binMin);
+
+  function countInBins(values) {
+    const counts = new Array(bins.length).fill(0);
+    const total = values.length || 1;
+    values.forEach(v => {
+      let idx = Math.floor((v - binMin) / binStep);
+      if (idx < 0) idx = 0;
+      if (idx >= bins.length) idx = bins.length - 1;
+      counts[idx]++;
+    });
+    return counts.map(c => c / total);
+  }
+
+  const allCounts = countInBins(allValues);
+  const last7Counts = countInBins(last7Values);
+  const binLabels = bins.map(b => labelFn(b));
+
+  distChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: binLabels,
+      datasets: [
+        {
+          label: '所有记录',
+          data: allCounts,
+          backgroundColor: isDark ? 'rgba(248,231,181,0.18)' : 'rgba(120,113,108,0.22)',
+          borderRadius: 3,
+          barPercentage: 0.85,
+          categoryPercentage: 0.9,
+          xAxisID: 'x',
+          order: 2
+        },
+        {
+          label: '最近7次',
+          data: last7Counts,
+          backgroundColor: isDark ? 'rgba(212,135,74,0.55)' : 'rgba(212,135,74,0.50)',
+          borderRadius: 3,
+          barPercentage: 0.55,
+          categoryPercentage: 0.9,
+          xAxisID: 'x2',
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          labels: { color: fontColor, font: { size: 10 }, boxWidth: 12, padding: 10 }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${(ctx.raw * 100).toFixed(0)}%`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: fontColor, font: { size: 10 }, maxRotation: 45 },
+          grid: { display: false },
+          offset: true
+        },
+        x2: {
+          display: false,
+          offset: true,
+          labels: binLabels
+        },
+        y: {
+          ticks: {
+            color: fontColor,
+            callback: v => `${(v * 100).toFixed(0)}%`
+          },
+          grid: { color: gridColor }
+        }
+      }
+    }
+  });
+}
+
+// ==================== Average + Error Bar Chart ====================
+let avgChart = null;
+
+// Custom Chart.js plugin for error bars
+const errorBarPlugin = {
+  id: 'errorBars',
+  afterDatasetsDraw(chart) {
+    const meta = chart.getDatasetMeta(0);
+    if (!meta || !chart.data.datasets[0]._stddevs) return;
+    const stddevs = chart.data.datasets[0]._stddevs;
+    const ctx = chart.ctx;
+    const yScale = chart.scales.y;
+
+    const isDark = document.body.classList.contains('is-sleeping');
+    ctx.save();
+    ctx.strokeStyle = isDark ? 'rgba(248,231,181,0.55)' : 'rgba(28,25,23,0.4)';
+    ctx.lineWidth = 1.5;
+
+    meta.data.forEach((pt, i) => {
+      const sd = stddevs[i] || 0;
+      if (sd === 0) return;
+      const mean = chart.data.datasets[0].data[i];
+
+      const yTop = yScale.getPixelForValue(mean + sd);
+      const yBot = yScale.getPixelForValue(mean - sd);
+      const x = pt.x;
+
+      ctx.beginPath();
+      ctx.moveTo(x, yTop);
+      ctx.lineTo(x, yBot);
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  }
+};
+
+function renderAverage(records) {
+  if (avgChart) { avgChart.destroy(); avgChart = null; }
+
+  const mode = loadChartMode();
+  const canvas = document.getElementById('avgChart');
+  if (!canvas || records.length === 0) return;
+
+  const titleEl = document.getElementById('avgTitle');
+  if (titleEl) titleEl.textContent = mode === 'duration' ? '每周平均睡眠时长' : '每周平均入睡时间';
+
+  const isDark = document.body.classList.contains('is-sleeping');
+  const fontColor = isDark ? 'rgba(248,231,181,0.72)' : '#78716c';
+  const gridColor = isDark ? 'rgba(248,231,181,0.10)' : 'rgba(120,113,108,0.12)';
+
+  // Group by week
+  const weekMap = new Map();
+  records.forEach(r => {
+    const sd = getSleepDate(r.sleep);
+    const mon = getWeekMonday(sd);
+    const key = mon.getTime();
+    if (!weekMap.has(key)) weekMap.set(key, { mon, values: [] });
+
+    if (mode === 'duration') {
+      weekMap.get(key).values.push(calcDuration(r.sleep, r.wake));
+    } else {
+      weekMap.get(key).values.push(getSleepAxisHour(r.sleep));
+    }
+  });
+
+  const weeks = Array.from(weekMap.values())
+    .sort((a, b) => a.mon - b.mon)
+    .slice(-12);
+
+  const labels = weeks.map(w => fmtDateShort(w.mon));
+  const means = weeks.map(w => {
+    const sum = w.values.reduce((a, b) => a + b, 0);
+    return Math.round((sum / w.values.length) * 100) / 100;
+  });
+  const stddevs = weeks.map(w => {
+    if (w.values.length < 2) return 0;
+    const mean = w.values.reduce((a, b) => a + b, 0) / w.values.length;
+    const variance = w.values.reduce((s, v) => s + (v - mean) ** 2, 0) / (w.values.length - 1);
+    return Math.sqrt(variance);
+  });
+
+  const barColors = means.map(v => {
+    if (mode === 'duration') return durationBarColor(v);
+    return sleepTimeColorFromAxisHour(v);
+  });
+
+  const chartType = mode === 'duration' ? 'bar' : 'line';
+
+  const dataset = mode === 'duration'
+    ? {
+        data: means,
+        backgroundColor: barColors,
+        borderRadius: 6,
+        borderSkipped: false,
+        _stddevs: stddevs
+      }
+    : {
+        data: means,
+        showLine: false,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        pointBorderWidth: 2,
+        pointBackgroundColor: barColors,
+        pointBorderColor: barColors,
+        borderColor: 'transparent',
+        _stddevs: stddevs
+      };
+
+  const yConfig = mode === 'duration'
+    ? {
+        min: 0,
+        max: 10,
+        ticks: { color: fontColor, stepSize: 2 },
+        grid: { color: gridColor }
+      }
+    : {
+        reverse: true,
+        min: 21,
+        max: 28,
+        ticks: {
+          color: fontColor,
+          stepSize: 1,
+          callback: v => hourLabel(v)
+        },
+        grid: { color: gridColor }
+      };
+
+  avgChart = new Chart(canvas, {
+    type: chartType,
+    data: { labels, datasets: [dataset] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const sd = stddevs[ctx.dataIndex];
+              const val = mode === 'duration'
+                ? durationText(ctx.raw)
+                : hourToAmPm(ctx.raw);
+              return sd > 0
+                ? `${val} ± ${mode === 'duration' ? durationText(sd) : (Math.round(sd*60)) + 'm'}`
+                : val;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: fontColor, font: { size: 10 } },
+          grid: { display: false }
+        },
+        y: yConfig
+      }
+    },
+    plugins: [errorBarPlugin]
+  });
+}
+
+// ==================== Records Gantt Chart ====================
 function renderHistory() {
-  const records = loadRecords().slice().reverse();
-  const container = document.getElementById('historyList');
+  const records = loadRecords().slice().sort((a, b) => new Date(b.sleep) - new Date(a.sleep));
+  const container = document.getElementById('historyGanttWrap');
 
   if (!container) return;
 
@@ -1620,37 +2227,78 @@ function renderHistory() {
     return;
   }
 
-  container.innerHTML = records.map(r => {
-    const dur = calcDuration(r.sleep, r.wake);
-    const sd = getSleepDate(r.sleep);
+  const goals = loadGoals();
 
-    return `
-      <div class="record-card" onclick="openEditModal(${r.id})">
-        <div class="record-left">
-          <div class="record-date">${fmtDate(sd)} ${weekdayStr(sd)}</div>
-          <div class="record-times">
-            <span>🌙 ${toAmPm(r.sleep)}</span>
-            <span>☀️ ${toAmPm(r.wake)}</span>
-          </div>
-        </div>
-        <div class="record-right">
-          <div class="record-duration ${durationClass(dur)}">${durationText(dur)}</div>
-          <div class="record-edit-icon">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
+  // Time axis: 8 PM to 12 PM (next day) = 16 hours range
+  const axisStart = 20; // 8 PM
+  const axisEnd = 36;   // 12 PM next day (= 12 + 24)
+  const totalHours = axisEnd - axisStart;
+
+  const rowH = 26;
+  const rowGap = 3;
+  const labelPct = 15; // % of width for date labels
+  const barPct = 100 - labelPct;
+  const axisH = 24;
+  const totalH = axisH + records.length * (rowH + rowGap) + 12;
+
+  // Time axis labels (percentage-based)
+  const axisTicks = [];
+  for (let h = axisStart; h <= axisEnd; h += 2) {
+    const leftPct = labelPct + barPct * (h - axisStart) / totalHours;
+    axisTicks.push(`<span style="position:absolute;left:${leftPct.toFixed(2)}%;transform:translateX(-50%)">${hourLabel(h)}</span>`);
+  }
+
+  const isDark = document.body.classList.contains('is-sleeping');
+
+  let barsHtml = '';
+  records.forEach((r, i) => {
+    const sd = getSleepDate(r.sleep);
+    const dateLabel = `${sd.getMonth()+1}/${sd.getDate()}`;
+    const dur = calcDuration(r.sleep, r.wake);
+
+    let sleepH = getSleepAxisHour(r.sleep);
+    let wakeH = getSleepAxisHour(r.wake);
+    if (wakeH <= sleepH) wakeH += 24;
+
+    // Clamp to axis range
+    const s = Math.max(sleepH, axisStart);
+    const w = Math.min(wakeH, axisEnd);
+    if (w <= s) return; // out of range
+
+    const leftPct = labelPct + (s - axisStart) / totalHours * barPct;
+    const widthPct = (w - s) / totalHours * barPct;
+    const top = axisH + i * (rowH + rowGap);
+
+    const color = dur >= goals.duration
+      ? (isDark ? 'rgba(59,124,94,0.75)' : 'rgba(59,124,94,0.80)')
+      : (isDark ? 'rgba(212,135,74,0.75)' : 'rgba(212,135,74,0.86)');
+
+    barsHtml += `
+      <div class="gantt-date-label" style="top:${top}px;left:0;text-align:right;width:${labelPct - 1}%">${dateLabel}</div>
+      <div class="gantt-bar" style="top:${top}px;left:${leftPct.toFixed(2)}%;width:${widthPct.toFixed(2)}%;height:${rowH}px;background:${color}"
+           onclick="openEditModal(${r.id})"
+           title="${dateLabel} ${toAmPm(r.sleep)} → ${toAmPm(r.wake)} (${durationText(dur)})"></div>`;
+  });
+
+  // Grid lines
+  let gridHtml = '';
+  for (let h = axisStart; h <= axisEnd; h += 2) {
+    const leftPct = labelPct + (h - axisStart) / totalHours * barPct;
+    const lineColor = isDark ? 'rgba(248,231,181,0.07)' : 'rgba(120,113,108,0.08)';
+    gridHtml += `<div style="position:absolute;left:${leftPct.toFixed(2)}%;top:${axisH}px;bottom:0;width:1px;background:${lineColor}"></div>`;
+  }
+
+  container.innerHTML = `
+    <div class="gantt-container" style="width:100%;height:${totalH}px;position:relative">
+      <div class="gantt-time-axis" style="width:100%;position:relative;height:${axisH}px">
+        ${axisTicks.join('')}
+      </div>
+      ${gridHtml}
+      ${barsHtml}
+    </div>`;
 }
 
 // ==================== 图表：按需加载 Chart.js ====================
-let weeklyChart = null;
-let ganttChart = null;
-let weeklySleepChart = null;
-let dailySleepChart = null;
 let chartJsLoadingPromise = null;
 let chartRenderToken = 0;
 
@@ -1680,381 +2328,27 @@ function getWeekMonday(date) {
   return mon;
 }
 
-function renderStatsButtons(records) {
-  const statsGrid = document.getElementById('statsGrid');
-  const mode = loadChartMode();
-
-  if (!statsGrid) return;
-
-  if (!records || records.length === 0) {
-    statsGrid.innerHTML = `
-      <button class="stat-card ${mode === 'duration' ? 'active' : ''}" type="button" onclick="setChartMode('duration')" data-mode="duration">
-        <div class="stat-value">--</div>
-        <div class="stat-label">平均睡眠时长</div>
-      </button>
-      <button class="stat-card ${mode === 'sleepTime' ? 'active' : ''}" type="button" onclick="setChartMode('sleepTime')" data-mode="sleepTime">
-        <div class="stat-value" style="font-size:20px">--</div>
-        <div class="stat-label">平均入睡时间</div>
-      </button>`;
-    return;
-  }
-
-  const allDurations = records.map(r => calcDuration(r.sleep, r.wake));
-  const avgDur = allDurations.reduce((a, b) => a + b, 0) / allDurations.length;
-  const avgSleepHour = records.reduce((sum, r) => sum + getSleepAxisHour(r.sleep), 0) / records.length;
-
-  statsGrid.innerHTML = `
-    <button class="stat-card ${mode === 'duration' ? 'active' : ''}" type="button" onclick="setChartMode('duration')" data-mode="duration">
-      <div class="stat-value ${durationClass(avgDur)}">${durationText(avgDur)}</div>
-      <div class="stat-label">平均睡眠时长</div>
-    </button>
-    <button class="stat-card ${mode === 'sleepTime' ? 'active' : ''}" type="button" onclick="setChartMode('sleepTime')" data-mode="sleepTime">
-      <div class="stat-value" style="font-size:20px">${hourToAmPm(avgSleepHour)}</div>
-      <div class="stat-label">平均入睡时间</div>
-    </button>`;
-}
-
-function renderDurationCharts(records) {
-  weeklyChart = clearChart(weeklyChart);
-  ganttChart = clearChart(ganttChart);
-  weeklySleepChart = clearChart(weeklySleepChart);
-  dailySleepChart = clearChart(dailySleepChart);
-
-  showSectionCharts('duration');
-
-  const chartFontColor = document.body.classList.contains('is-sleeping')
-    ? 'rgba(248, 231, 181, 0.72)'
-    : '#78716c';
-  const gridColor = document.body.classList.contains('is-sleeping')
-    ? 'rgba(248, 231, 181, 0.10)'
-    : 'rgba(120,113,108,0.12)';
-
-  // 每周平均睡眠时长
-  const weekMap = new Map();
-  records.forEach(r => {
-    const sd = getSleepDate(r.sleep);
-    const mon = getWeekMonday(sd);
-    const key = mon.getTime();
-
-    if (!weekMap.has(key)) weekMap.set(key, { mon, durations: [] });
-    weekMap.get(key).durations.push(calcDuration(r.sleep, r.wake));
-  });
-
-  const weeks = Array.from(weekMap.values())
-    .sort((a, b) => a.mon - b.mon)
-    .slice(-12);
-
-  const weekLabels = weeks.map(w => fmtDateShort(w.mon));
-  const weekAvgs = weeks.map(w =>
-    Math.round((w.durations.reduce((a, b) => a + b, 0) / w.durations.length) * 100) / 100
-  );
-
-  weeklyChart = new Chart(document.getElementById('weeklyChart'), {
-    type: 'bar',
-    data: {
-      labels: weekLabels,
-      datasets: [{
-        data: weekAvgs,
-        backgroundColor: weekAvgs.map(d => durationBarColor(d)),
-        borderRadius: 6,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => `平均 ${durationText(ctx.raw)}`
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: chartFontColor, font: { size: 10 } },
-          grid: { display: false }
-        },
-        y: {
-          min: 0,
-          max: 10,
-          ticks: { color: chartFontColor, stepSize: 2 },
-          grid: { color: gridColor }
-        }
-      }
-    }
-  });
-
-  // 每日睡眠时间甘特图
-  renderFixedYAxis('ganttAxis', [
-    '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM',
-    '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM'
-  ]);
-
-  // 最近日期靠右：旧 -> 新
-  const ganttRecords = records.slice().sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
-  const ganttLabels = ganttRecords.map(r => fmtDateShort(getSleepDate(r.sleep)));
-
-  const ganttData = ganttRecords.map(r => {
-    const sh = getSleepAxisHour(r.sleep);
-    let wh = getSleepAxisHour(r.wake);
-    if (wh <= sh) wh += 24;
-    return [sh, wh];
-  });
-
-  const ganttCanvas = setupScrollableCanvas('ganttViewport', 'ganttChart', ganttRecords.length, 30, 260);
-  if (!ganttCanvas) return;
-
-  ganttChart = new Chart(ganttCanvas, {
-    type: 'bar',
-    data: {
-      labels: ganttLabels,
-      datasets: [{
-        data: ganttData,
-        backgroundColor: ganttData.map(d => durationBarColor(d[1] - d[0])),
-        borderRadius: 4,
-        borderSkipped: false,
-        barPercentage: 0.55,
-        categoryPercentage: 0.8
-      }]
-    },
-    options: {
-      responsive: false,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: items => ganttLabels[items[0].dataIndex],
-            label: ctx => {
-              const [s, w] = ctx.raw;
-              return `🌙 ${hourToAmPm(s)} → ☀️ ${hourToAmPm(w)}  （${durationText(w - s)}）`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: chartFontColor,
-            font: { size: 10 },
-            maxRotation: 45,
-            minRotation: 30
-          },
-          grid: { display: false }
-        },
-        y: {
-          reverse: true,
-          min: 22,
-          max: 34,
-          ticks: {
-            display: false
-          },
-          grid: { color: gridColor }
-        }
-      }
-    }
-  });
-
-  scrollChartToEnd('ganttViewport');
-}
-
-function renderSleepTimeCharts(records) {
-  weeklyChart = clearChart(weeklyChart);
-  ganttChart = clearChart(ganttChart);
-  weeklySleepChart = clearChart(weeklySleepChart);
-  dailySleepChart = clearChart(dailySleepChart);
-
-  showSectionCharts('sleepTime');
-
-  const chartFontColor = document.body.classList.contains('is-sleeping')
-    ? 'rgba(248, 231, 181, 0.72)'
-    : '#78716c';
-  const gridColor = document.body.classList.contains('is-sleeping')
-    ? 'rgba(248, 231, 181, 0.10)'
-    : 'rgba(120,113,108,0.12)';
-
-  // 每周平均入睡时间
-  const weekMap = new Map();
-  records.forEach(r => {
-    const sd = getSleepDate(r.sleep);
-    const mon = getWeekMonday(sd);
-    const key = mon.getTime();
-
-    if (!weekMap.has(key)) weekMap.set(key, { mon, values: [] });
-    weekMap.get(key).values.push(getSleepAxisHour(r.sleep));
-  });
-
-  const weeks = Array.from(weekMap.values())
-    .sort((a, b) => a.mon - b.mon)
-    .slice(-12);
-
-  const weekLabels = weeks.map(w => fmtDateShort(w.mon));
-  const weekValues = weeks.map(w =>
-    Math.round((w.values.reduce((a, b) => a + b, 0) / w.values.length) * 100) / 100
-  );
-  const weekColors = weekValues.map(v => sleepTimeColorFromAxisHour(v));
-
-  weeklySleepChart = new Chart(document.getElementById('weeklySleepChart'), {
-    type: 'line',
-    data: {
-      labels: weekLabels,
-      datasets: [{
-        data: weekValues,
-        showLine: false,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        pointBorderWidth: 2,
-        pointBackgroundColor: weekColors,
-        pointBorderColor: weekColors,
-        borderColor: 'transparent',
-        tension: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => `平均入睡 ${hourToAmPm(ctx.raw)}`
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: chartFontColor, font: { size: 10 } },
-          grid: { display: false }
-        },
-        y: {
-          reverse: true,
-          min: 21,
-          max: 28,
-          ticks: {
-            color: chartFontColor,
-            stepSize: 1,
-            callback: v => hourLabel(v)
-          },
-          grid: { color: gridColor }
-        }
-      }
-    }
-  });
-
-  // 每日入睡时间
-  renderFixedYAxis('dailySleepAxis', ['9 PM', '10 PM', '11 PM', '12 AM', '1 AM', '2 AM', '3 AM', '4 AM']);
-
-  // 最近日期靠右：旧 -> 新
-  const dailyRecords = records.slice().sort((a, b) => new Date(a.sleep) - new Date(b.sleep));
-  const dailyLabels = dailyRecords.map(r => fmtDateShort(getSleepDate(r.sleep)));
-  const dailyValues = dailyRecords.map(r => getSleepAxisHour(r.sleep));
-  const dailyColors = dailyRecords.map(r => sleepTimeColorFromDate(r.sleep));
-
-  const dailyCanvas = setupScrollableCanvas('dailySleepViewport', 'dailySleepChart', dailyRecords.length, 30, 260);
-  if (!dailyCanvas) return;
-
-  dailySleepChart = new Chart(dailyCanvas, {
-    type: 'line',
-    data: {
-      labels: dailyLabels,
-      datasets: [{
-        data: dailyValues,
-        showLine: false,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        pointBorderWidth: 2,
-        pointBackgroundColor: dailyColors,
-        pointBorderColor: dailyColors,
-        borderColor: 'transparent',
-        tension: 0
-      }]
-    },
-    options: {
-      responsive: false,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: items => dailyLabels[items[0].dataIndex],
-            label: ctx => `入睡 ${hourToAmPm(ctx.raw)}`
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: chartFontColor,
-            font: { size: 10 },
-            maxRotation: 45,
-            minRotation: 30
-          },
-          grid: { display: false }
-        },
-        y: {
-          reverse: true,
-          min: 21,
-          max: 28,
-          ticks: {
-            display: false
-          },
-          grid: { color: gridColor }
-        }
-      }
-    }
-  });
-
-  scrollChartToEnd('dailySleepViewport');
-}
-
 function renderCharts() {
-  const statsGrid = document.getElementById('statsGrid');
-  const currentMode = loadChartMode();
   const token = ++chartRenderToken;
-
-  if (statsGrid) {
-    statsGrid.innerHTML = `
-      <div class="empty-state" style="grid-column:1/-1">
-        <div class="empty-icon">📊</div>
-        <p>正在加载图表…</p>
-      </div>`;
-  }
+  applyModeSwitchUI();
 
   const records = loadRecords();
-  renderStatsButtons(records);
-  applyChartMode();
 
   if (!records || records.length === 0) {
-    destroyAllCharts();
-    showSectionEmpty(currentMode, currentMode === 'duration'
-      ? '<div class="empty-icon">📊</div><p>记录数据后<br>这里会显示统计图表</p>'
-      : '<div class="empty-icon">🌙</div><p>记录数据后<br>这里会显示平均入睡时间图表</p>');
+    // Show empty states
+    renderCalendar();
     return;
   }
+
+  renderCalendar();
 
   loadChartJS()
     .then(() => {
       if (token !== chartRenderToken) return;
-      if (loadChartMode() !== currentMode) return;
-
-      destroyAllCharts();
-
-      if (currentMode === 'duration') {
-        renderDurationCharts(records);
-      } else {
-        renderSleepTimeCharts(records);
-      }
+      renderDistribution(records);
+      renderAverage(records);
     })
     .catch(() => {
-      if (statsGrid) {
-        statsGrid.innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1">
-            <div class="empty-icon">⚠️</div>
-            <p>统计图表加载失败</p>
-          </div>`;
-      }
       showToast('统计图表加载失败');
     });
 }
@@ -2089,7 +2383,14 @@ function showToast(msg) {
 
 // ==================== 初始化 ====================
 updatePunchUI();
-applyChartMode();
+applyModeSwitchUI();
+initCalendar();
+
+// 启动时从云端同步
+cloudSync().then(() => {
+  renderHistory();
+  refreshChartsIfVisible();
+});
 
 // ==================== PWA：Service Worker 注册 ====================
 if ('serviceWorker' in navigator) {
